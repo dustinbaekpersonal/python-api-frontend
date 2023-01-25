@@ -1,0 +1,60 @@
+version: '3'
+services:
+
+
+  dash-app:
+    build:
+      context: Dash/ # build context of dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "8050:8050" # host:container
+    volumes:
+      - ./Dash:/dash # add volume so code edited locally is mounted in container automatically
+    environment:
+      FLASK_APP_URL: "http://flask-app:5000"
+    restart: always
+    image: "dashapp:v1"
+
+
+  flask-app:
+    build:
+      context: flask/ # build context of dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # host:container
+    volumes:
+      - ./flask:/flask # add volume so code edited locally is mounted in container automatically
+    environment:
+
+      CONFIG_ENV: Dev # can be "Dev", "Test" or "Production"
+
+      CSV_FILE: "./db/stock_db.csv"
+      # Postgres
+      POSTGRES_HOST_URI: postgresql
+      POSTGRES_PORT: 5432
+      POSTGRES_DB_NAME: templatedb
+      # Should be secrets in cloud deployment
+      POSTGRES_DB_PASSWORD: password1
+      POSTGRES_DB_USER: user1
+
+    restart: always
+    image: "flaskapp:v1"
+#    depends_on:
+#      - postgresql
+
+  # use docker container to host postgres sql instance so you do not need to install postgres locally
+  # initialisation of this instance is controlled by the files in /sql-db
+#  postgresql:
+#    image: "postgres" # use latest official postgres version
+#    env_file:
+#      - sql-db/postgresdb.env # configure postgres db instance
+#    volumes:
+#      - ./sql-db/mydb-sql-schema.sql:/docker-entrypoint-initdb.d/1-sql-schema.sql # Volume to initialise db schema defined in xx-sql-schema.sql
+#      - ./sql-db/mydb-default-data.sql:/docker-entrypoint-initdb.d/2-default-data.sql # Volume to initialise initial reference data population
+#      - postgresql-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+#    ports:
+#      - "5432:5432"
+#
+#
+#volumes:
+#  postgresql-data: # named volumes can be managed easier using docker-compose
