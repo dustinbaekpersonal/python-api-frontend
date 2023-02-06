@@ -1,0 +1,3 @@
+fastapi[all]
+attrs>=17.3.0
+webargs<6.0
