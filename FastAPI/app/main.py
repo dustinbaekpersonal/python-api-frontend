@@ -2,7 +2,7 @@
 Main file for the template application
 """
 from fastapi import FastAPI
-from routers import items
+import items
 import uvicorn
 
 
@@ -13,8 +13,7 @@ app.include_router(items.router)
 
 @app.get("/")
 async def root():
-     return {"message": "Welcom to FastAPI Course!"}
+     return {"message": "Welcome to FastAPI Course!"}
 
 if __name__ == "__main__":
-     uvicorn.run(app, host="0.0.0.0", port=8000)
-     # print("main file")
+     uvicorn.run(app, host="127.0.0.1", port=8000)

@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Path, Query, HTTPException
 from datetime import datetime
-from schemas.schema_inventory import *
+from schema import inventory, StoreName, Item
+from utils import submit_stocklevel
 
 router = APIRouter()
+
+initial_stock_to_csv=list(map(lambda x: submit_stocklevel(inventory.items[x]), inventory.items))
+# import pdb; pdb.set_trace()
 
 @router.get("/stock")
 async def all_stocklevels():
@@ -42,6 +46,8 @@ async def post_stocklevel(item_id: str, item: Item):
           raise HTTPException(status_code=404, detail="Item ID already exists")
      item_dict["datetime"] = datetime.now()
      inventory.items[item_id] = item_dict
+     success = submit_stocklevel(item_dict)
+
      return inventory.items[item_id]
 
 @router.put("/update-item/{item_id}")
