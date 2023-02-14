@@ -1,7 +1,7 @@
 import os
 
 config = {
-	'API_KEY':"AIzaSyAUzhawo81UdX-taQEm1dUGlEu2p2EyEHg",
+	
 	'product_types':[
 		'toilet paper',
 		'soap',
@@ -19,6 +19,14 @@ config = {
 		2:'Medium stock',
 		3:'High stock'
 	},
+	    'store_names':[
+        'Sainsburys',
+        'Coop',
+        'Waitrose',
+        'Aldi'
+    ],
+
+
 	'DB_FILEPATH':os.getenv("CSV_FILE", "..flask/db/stock_db.csv"),
-	'FLASK_APP_URL':'http://flask-app:5000',
+	'FLASK_APP_URL':'http://flask-app:5000', # change to fastapi url
 }

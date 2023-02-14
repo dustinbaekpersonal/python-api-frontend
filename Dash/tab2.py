@@ -6,7 +6,7 @@ import requests
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-import geocoder
+#import geocoder
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
@@ -31,7 +31,7 @@ layout = dcc.Tab(
         html.Br(),
         html.H2("View local stock levels"),
         html.Label("Product type"),
-        # Select the stock to view levels of
+        # Select the stock to view levels of ..................
         dcc.Dropdown(
             id="product_type_mapview_dropdown",
             options=[
@@ -72,12 +72,10 @@ layout = dcc.Tab(
 
 def load_reports(product_type):
     """For a given product_type, returns the most recent stock level for each location
-
     Args:
             product_type (str): product type for which to return the results
     Returns:
             reports_df (pd.DataFrame): DataFrame of the results for the given product_type
-
     """
 
     url = f"{config['FLASK_APP_URL']}/api/v1/stocklevel"
@@ -88,7 +86,7 @@ def load_reports(product_type):
     if req.status_code != 200:
         # create blank df
         reports_df = pd.DataFrame(
-            columns=["datetime", "resolved_address", "lat", "lng", "stock_level"]
+            columns=["datetime", "resolved_address", "stock_level"]
         )
     else:
 
@@ -109,13 +107,10 @@ def load_reports(product_type):
 def draw_map(product_type):
     """Produces the plotly graph object to display the most recent
     reports for each location of a given stock, centred to the user's location
-
     Args:
             product_type (str): product type for which to display stock levels
-
     Returns:
             dict (plotly.graphobject.Scattermapbox, plotly.graphobject.Layout): Plotly objects required to plot the map
-
     """
 
     logger.debug("Load map button clicked! ")
@@ -155,7 +150,7 @@ def draw_map(product_type):
     logger.debug("IP for localisation: %s", client_ip)
 
     # Get the IP address to centre the map
-    curr_loc = geocoder.ip(client_ip).latlng
+    #curr_loc = geocoder.ip(client_ip).latlng
 
     logger.debug("Geocoded location from IP: %s", curr_loc)
 
