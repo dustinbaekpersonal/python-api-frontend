@@ -20,5 +20,5 @@ config = {
 		3:'High stock'
 	},
 	'DB_FILEPATH':os.getenv("CSV_FILE", "..flask/db/stock_db.csv"),
-	'FLASK_APP_URL':'http://flask-app:5000',
+	'FLASK_APP_URL':'http://localhost:5000',
 }
