@@ -30,7 +30,7 @@ app.layout = html.Div(
                         # on page load
                         html.Div(id="dummy", children=None),
                         # We will store the response from the Geocoder API in this dcc.Store component
-                        dcc.Store(id="address_response_store", storage_type="memory"),
+                        #dcc.Store(id="address_response_store", storage_type="memory"),
                         html.Br(),
                         # The main body of the page is split over two tabs
                         # To keep this file less cluttered, they are defined in their own .py files.
@@ -56,4 +56,4 @@ app.layout = html.Div(
 
 
 if __name__ == "__main__":
-    app.run_server(host="0.0.0.0", port=8050, debug=True)
+    app.run_server(host="0.0.0.0", port=8000, debug=True)
