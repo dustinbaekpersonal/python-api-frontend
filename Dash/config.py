@@ -20,13 +20,13 @@ config = {
 		3:'High stock'
 	},
 	    'store_names':[
-        'Sainsburys',
-        'Coop',
-        'Waitrose',
-        'Aldi'
+        'Sainsbury_Euston',
+        'Sainsbury_Holborn',
+        'Sainsbury_Soho',
+        'Sainsbury_Barbican'
     ],
 
 
-	'DB_FILEPATH':os.getenv("CSV_FILE", "..flask/db/stock_db.csv"),
-	'FLASK_APP_URL':'http://flask-app:5000', # change to fastapi url
+	'DB_FILEPATH':os.getenv("CSV_FILE", "..fastapi/db/stock_db.csv"),
+    'FastAPI_APP_URL':'http://local:8000'
 }

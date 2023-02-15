@@ -12,12 +12,10 @@ import plotly.graph_objs as go
 import requests
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-from flask import request
+#from flask import request
 
 from app import app
 from config import config
-
-#API_KEY = config["API_KEY"]
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -117,7 +115,7 @@ layout = dcc.Tab(
                                        }
                                    for p in config["store_names"]
                                     ],
-                                  value="Sainsburys",
+                                  value="Sainsbury_Euston",
                                   placeholder="Select store name",
                                   searchable=False,
                                 ),
@@ -134,7 +132,6 @@ layout = dcc.Tab(
     ],
 
 )
-
 
 # This section calls back (i.e. activates the change in input) the values of the sections - product type, stock level and store names into the app
 
@@ -164,7 +161,8 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name, address_r
     if not n_clicks or not input_address:
         raise PreventUpdate
 
-    url = f"{config['FLASK_APP_URL']}/api/v1/stocklevel"
+    item_id="ZG011AQA"
+    url = f"{config['FastAPI_APP_URL']}/create-stocklevel/{item_id}"
 
     data = {
         "stock_level": stock_level,
@@ -173,10 +171,9 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name, address_r
         "datetime": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
-    # Make request to flask-app to add stock
+    # Make request to FAST-app to add stock
     req = requests.post(url, json=data)
     if req.status_code != 200:
-        # raise error
         raise PreventUpdate
 
 

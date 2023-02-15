@@ -6,13 +6,12 @@ import requests
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-#import geocoder
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-from flask import request
+#from flask import request
 
 from app import app
 from config import config
@@ -78,15 +77,14 @@ def load_reports(product_type):
             reports_df (pd.DataFrame): DataFrame of the results for the given product_type
     """
 
-    url = f"{config['FLASK_APP_URL']}/api/v1/stocklevel"
-    # Make request to flask-app to add stock
-
-
+    item_id="ZG011AQA"
+    url = f"{config['FastAPI_APP_URL']}/create-stocklevel/{item_id}"
+   
     req = requests.get(url, params=dict(product_type=product_type))
     if req.status_code != 200:
         # create blank df
         reports_df = pd.DataFrame(
-            columns=["datetime", "resolved_address", "stock_level"]
+            columns=["datetime", "store_names", "stock_level"]
         )
     else:
 
@@ -120,8 +118,8 @@ def draw_map(product_type):
     logger.info("Loaded results df, with %s rows", len(reports_df))
 
     map_data = go.Scattermapbox(
-        lat=reports_df["lat"],
-        lon=reports_df["lng"],
+        #lat=reports_df["lat"],
+        #lon=reports_df["lng"],
         mode="markers",
         marker=dict(
             size=15,
@@ -140,7 +138,7 @@ def draw_map(product_type):
                 thickness=0.03,
             ),
         ),
-        hovertext=reports_df["resolved_address"]
+        hovertext=reports_df["store_names"]
         + "<br>Last reported: "
         + reports_df["datetime"],
     )
@@ -149,8 +147,6 @@ def draw_map(product_type):
 
     logger.debug("IP for localisation: %s", client_ip)
 
-    # Get the IP address to centre the map
-    #curr_loc = geocoder.ip(client_ip).latlng
 
     logger.debug("Geocoded location from IP: %s", curr_loc)
 
@@ -158,7 +154,7 @@ def draw_map(product_type):
         mapbox_style="open-street-map",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         mapbox=dict(
-            center=go.layout.mapbox.Center(lat=curr_loc[0], lon=curr_loc[1]),
+           center=go.layout.mapbox.Center(lat=curr_loc[0], lon=curr_loc[1]),
             zoom=10,
         ),
     )
