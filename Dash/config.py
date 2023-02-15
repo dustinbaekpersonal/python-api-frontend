@@ -20,13 +20,13 @@ config = {
 		3:'High stock'
 	},
 	    'store_names':[
-        'Sainsbury_Euston',
-        'Sainsbury_Holborn',
-        'Sainsbury_Soho',
-        'Sainsbury_Barbican'
+        'Sainsburys_Euston',
+        'Sainsburys_Holborn',
+        'Sainsburys_Soho',
+        'Sainsburys_Barbican'
     ],
 
 
 	'DB_FILEPATH':os.getenv("CSV_FILE", "..fastapi/db/stock_db.csv"),
-    'FastAPI_APP_URL':'http://local:8000'
+    'FastAPI_APP_URL':'http://localhost:8000'
 }
