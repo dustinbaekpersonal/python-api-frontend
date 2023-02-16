@@ -1,17 +1,17 @@
 import json
 import logging
-import yaml
 
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 import requests
-
+import yaml
 from app import app
+
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-with open("../config.yml", 'r') as stream:
+with open("../config.yml", "r") as stream:
     config = yaml.safe_load(stream)
 
 

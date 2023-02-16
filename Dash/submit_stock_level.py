@@ -1,17 +1,16 @@
 import logging
 import random
 import string
-import yaml
 
 import requests
-
+import yaml
 from app import app
 
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-with open("../config.yml", 'r') as stream:
+with open("../config.yml", "r") as stream:
     config = yaml.safe_load(stream)
 
 logger = logging.getLogger(__name__)
@@ -74,8 +73,7 @@ layout = dcc.Tab(
                                 dcc.Dropdown(
                                     id="stock_level_dropdown",
                                     options=[
-                                        {"label": value, "value": value}
-                                        for value in config["stock_levels"]
+                                        {"label": value, "value": value} for value in config["stock_levels"]
                                     ],
                                     value=None,
                                     placeholder="Select stock level",
@@ -138,6 +136,7 @@ layout = dcc.Tab(
         html.Div(id="submit_confirmation_div"),
     ],
 )
+
 
 # not a very smart way, but whenever we create stocklevel, we need to input unique SKU id. For that we will randomly genearte 8 digits, so that front end users don't need to worry about it.
 def id_generator(size=8, char=string.ascii_uppercase + string.digits):

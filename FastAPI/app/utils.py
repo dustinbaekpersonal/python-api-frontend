@@ -1,11 +1,12 @@
 import os
-import sys
 
-import pandas as pd
 from datetime import datetime, timedelta
 from typing import Dict
 
+import pandas as pd
+
 DB_FILEPATH = os.getenv("CSV_FILE", "./db/stock_db.csv")
+
 
 def submit_stocklevel(stock_data: Dict) -> bool:
     """
@@ -26,10 +27,8 @@ def submit_stocklevel(stock_data: Dict) -> bool:
         db = pd.read_csv(DB_FILEPATH)
     else:
         db = pd.DataFrame()
-    
-    timestamp = stock_data.pop("datetime").strftime(
-        "%Y-%m-%dT%H:%M:%Sz"
-    )  # convert timestamp to str
+
+    timestamp = stock_data.pop("datetime").strftime("%Y-%m-%dT%H:%M:%Sz")  # convert timestamp to str
     stock_data["datetime"] = timestamp
     db = db.append(stock_data, ignore_index=True)
 
@@ -38,8 +37,9 @@ def submit_stocklevel(stock_data: Dict) -> bool:
 
     return True
 
+
 def add_datetime(inventory):
-     for item_id in inventory.items:
-          item_dict = inventory.items[item_id].dict()
-          item_dict["datetime"] = datetime.now() - timedelta(1)
-          inventory.items[item_id] = item_dict
+    for item_id in inventory.items:
+        item_dict = inventory.items[item_id].dict()
+        item_dict["datetime"] = datetime.now() - timedelta(1)
+        inventory.items[item_id] = item_dict

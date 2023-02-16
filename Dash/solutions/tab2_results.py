@@ -6,10 +6,10 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 import requests
-from flask import request
-
 from app import app
 from config import config
+from flask import request
+
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
@@ -119,7 +119,6 @@ def load_reports(product_type):
         # create blank df
         reports_df = pd.DataFrame(columns=["datetime", "resolved_address", "lat", "lng", "stock_level"])
     else:
-
         data = req.json()["data"]
         # get df data from request payload
         reports_df = pd.read_json(data, orient="records")
