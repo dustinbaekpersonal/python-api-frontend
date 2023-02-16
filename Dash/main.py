@@ -1,12 +1,9 @@
 import logging
 
-import dash_core_components as dcc
-import dash_html_components as html
-
-import tab1
-import tab2
+import submit_stock_level
+import view_stock_level
 from app import app
-
+from dash import dcc, html
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -23,23 +20,13 @@ app.layout = html.Div(
                 html.Div(
                     children=[
                         html.H1(children="PaperTrail"),
-                        html.H4(
-                            children="""Help people find important supplies"""
-                        ),
-                        # This dummy div is a bit of a hack to let us fire callbacks
-                        # on page load
+                        html.H4(children="""Help people find important supplies"""),
                         html.Div(id="dummy", children=None),
-                        # We will store the response from the Geocoder API in this dcc.Store component
-                        #dcc.Store(id="address_response_store", storage_type="memory"),
                         html.Br(),
-                        # The main body of the page is split over two tabs
-                        # To keep this file less cluttered, they are defined in their own .py files.
                         dcc.Tabs(
                             [
-                                # Tab 1 is the "Report Stock Levels" tab
-                                tab1.layout,
-                                # Tab 2 is "View Local Stock Levels"
-                                tab2.layout,
+                                submit_stock_level.layout,
+                                view_stock_level.layout,
                             ]
                         ),
                         html.Div(style={"height": "50%"}),

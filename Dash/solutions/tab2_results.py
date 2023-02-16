@@ -1,21 +1,18 @@
 import logging
 import os
 import platform
-import requests
 
-import dash_core_components as dcc
-import dash_html_components as html
-import dash_table
-import geocoder
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
-from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
+import requests
 from flask import request
 
 from app import app
 from config import config
+from dash import dcc, html
+from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -34,10 +31,7 @@ layout = dcc.Tab(
         # Select the stock to view levels of
         dcc.Dropdown(
             id="product_type_mapview_dropdown",
-            options=[
-                {"label": p.title(), "value": p.replace(" ", "_")}
-                for p in config["product_types"]
-            ],
+            options=[{"label": p.title(), "value": p.replace(" ", "_")} for p in config["product_types"]],
             value="toilet_paper",
             placeholder="Select stock type",
             searchable=False,
@@ -48,8 +42,6 @@ layout = dcc.Tab(
             id="map_container",
             children=[dcc.Graph(id="map_map")],
         ),
-
-
         ########################################
         #### Insert your reports table here ####
         ########################################
@@ -103,12 +95,8 @@ def populate_results_table(product_type):
     reports_df = load_reports(product_type)
     logger.info("Loaded results df, with %s rows", len(reports_df))
 
-    return_dict = reports_df[["resolved_address", "stock_level", "datetime"]].to_dict(
-        "records"
-    )
-    columns = [
-        {"name": i, "id": i} for i in ["resolved_address", "stock_level", "datetime"]
-    ]
+    return_dict = reports_df[["resolved_address", "stock_level", "datetime"]].to_dict("records")
+    columns = [{"name": i, "id": i} for i in ["resolved_address", "stock_level", "datetime"]]
 
     return return_dict, columns
 
@@ -126,19 +114,15 @@ def load_reports(product_type):
     url = f"{config['FLASK_APP_URL']}/api/v1/stocklevel"
     # Make request to flask-app to add stock
 
-
     req = requests.get(url, params=dict(product_type=product_type))
     if req.status_code != 200:
         # create blank df
-        reports_df = pd.DataFrame(
-            columns=["datetime", "resolved_address", "lat", "lng", "stock_level"]
-        )
+        reports_df = pd.DataFrame(columns=["datetime", "resolved_address", "lat", "lng", "stock_level"])
     else:
 
         data = req.json()["data"]
         # get df data from request payload
         reports_df = pd.read_json(data, orient="records")
-
 
     return reports_df
 
@@ -188,9 +172,7 @@ def draw_map(product_type):
                 thickness=0.03,
             ),
         ),
-        hovertext=reports_df["resolved_address"]
-        + "<br>Last reported: "
-        + reports_df["datetime"],
+        hovertext=reports_df["resolved_address"] + "<br>Last reported: " + reports_df["datetime"],
     )
 
     client_ip = "me"
