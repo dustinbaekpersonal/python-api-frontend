@@ -42,7 +42,7 @@ pip install -r requirements.txt
 To run the the main.py file:
 
 ```
-# change directory to app
+# change directory to app§
 cd app
 # run main.py using uvicorn
 uvicorn main:app --reload

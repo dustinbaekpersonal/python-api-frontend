@@ -1,5 +1,6 @@
 import json
 import logging
+import yaml
 
 import pandas as pd
 import plotly.express as px
@@ -7,9 +8,12 @@ import plotly.graph_objs as go
 import requests
 
 from app import app
-from config import config
 from dash import dcc, html
 from dash.dependencies import Input, Output
+
+with open("../config.yml", 'r') as stream:
+    config = yaml.safe_load(stream)
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -50,7 +54,7 @@ def load_reports(product_type):
             reports_df (pd.DataFrame): DataFrame of the results for the given product_type
     """
 
-    url = f"{config['FastAPI_APP_URL']}/get-by-product-name"
+    url = f"{config['fastapi_url']}/get-by-product-name"
 
     req = requests.get(url, params=dict(product_type=product_type))
     if req.status_code != 200:
