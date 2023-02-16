@@ -34,7 +34,7 @@ async def get_item_by_product_name(product_type: str = Query(None,  description=
      keys = [k for k,v in inventory.items.items() if v["product_type"]==product_type]
      if keys:
           return [inventory.items.get(key) for key in keys]
-     raise HTTPException(status_code=404, detail=f"All four stores do not have any stock of {product_type}")
+     raise HTTPException(status_code=404, detail=f"No stores have any stock of {product_type}")
 
 
 @router.get("/get-by-store-and-product-name")

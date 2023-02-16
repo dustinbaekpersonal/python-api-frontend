@@ -1,14 +1,18 @@
 import logging
 import random
 import string
+import yaml
 
 import requests
 
 from app import app
-from config import config
+
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+
+with open("../config.yml", 'r') as stream:
+    config = yaml.safe_load(stream)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -70,10 +74,8 @@ layout = dcc.Tab(
                                 dcc.Dropdown(
                                     id="stock_level_dropdown",
                                     options=[
-                                        {"label": "High", "value": 3},
-                                        {"label": "Medium", "value": 2},
-                                        {"label": "Low", "value": 1},
-                                        {"label": "Out of stock", "value": 0},
+                                        {"label": value, "value": value}
+                                        for value in config["stock_levels"]
                                     ],
                                     value=None,
                                     placeholder="Select stock level",
@@ -103,12 +105,12 @@ layout = dcc.Tab(
                                     id="store_name_dropdown",
                                     options=[
                                         {
-                                            "label": p.title(),
-                                            "value": p.replace(" ", "_"),
+                                            "label": p,
+                                            "value": p,
                                         }
                                         for p in config["store_names"]
                                     ],
-                                    value="Sainsbury_Euston",
+                                    value=config["store_names"][0],
                                     placeholder="Select store name",
                                     searchable=False,
                                 ),
@@ -170,7 +172,7 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name):
         raise PreventUpdate
 
     item_id = id_generator()  # randomly generate SKU for every submit
-    url = f"{config['FastAPI_APP_URL']}/create-stocklevel/{item_id}"
+    url = f"{config['fastapi_url']}/create-stocklevel/{item_id}"
 
     data = {
         "stock_level": stock_level,

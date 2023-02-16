@@ -1,0 +1,21 @@
+product_types:
+  - toilet paper
+  - soap
+  - hand sanitiser
+  - milk
+  - bread
+  - pasta
+  - tinned food
+  - fresh fruit
+  - fresh vegetables
+stock_levels:
+  - Out of stock
+  - Low
+  - Medium
+  - High
+store_names:
+  - Sainsbury's Euston
+  - Sainsbury's Holborn
+  - Sainsbury's Soho
+  - Sainsbury's Barbican
+fastapi_url: http://localhost:8000
