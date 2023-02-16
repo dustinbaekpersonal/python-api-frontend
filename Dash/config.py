@@ -27,6 +27,6 @@ config = {
     ],
 
 
-	'DB_FILEPATH':os.getenv("CSV_FILE", "..fastapi/db/stock_db.csv"),
+	'DB_FILEPATH':os.getenv("CSV_FILE", "..FastAPI/app/db/stock_db.csv"),
     'FastAPI_APP_URL':'http://localhost:8000'
 }

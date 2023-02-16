@@ -16,19 +16,19 @@ class Inventory(BaseModel):
      items: Dict[str, Item]
 
 class StoreName(str, Enum):
-     Sainsbury_Euston = "Sainsbury_Euston"
-     Sainsbury_Holborn = "Sainsbury_Holborn"
-     Sainsbury_Soho = "Sainsbury_Soho"
-     Sainsbury_Barbican = "Sainsbury_Barbican"
+     Sainsbury_Euston = "Sainsburys_Euston"
+     Sainsbury_Holborn = "Sainsburys_Holborn"
+     Sainsbury_Soho = "Sainsburys_Soho"
+     Sainsbury_Barbican = "Sainsburys_Barbican"
 
 item1 = Item(
-    store_name="Sainsbury_Euston",
+    store_name="Sainsburys_Euston",
     product_type="toilet_paper",
     stock_level=3
     )
 
 item2 = Item(
-    store_name="Sainsbury_Holborn",
+    store_name="Sainsburys_Holborn",
     product_type="soap",
     stock_level=5)
 

@@ -2,7 +2,7 @@ import logging
 import os
 import platform
 import requests
-
+import json
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
@@ -12,6 +12,7 @@ import plotly.graph_objs as go
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 #from flask import request
+
 
 from app import app
 from config import config
@@ -23,6 +24,10 @@ logging.basicConfig(
     level="DEBUG",
 )
 
+colors = {
+    'background': '#111111',
+    'text': '#7FDBFF'
+}
 
 layout = dcc.Tab(
     label="View local stock levels",
@@ -30,9 +35,8 @@ layout = dcc.Tab(
         html.Br(),
         html.H2("View local stock levels"),
         html.Label("Product type"),
-        # Select the stock to view levels of ..................
         dcc.Dropdown(
-            id="product_type_mapview_dropdown",
+            id="product_type_dropdown",
             options=[
                 {"label": p.title(), "value": p.replace(" ", "_")}
                 for p in config["product_types"]
@@ -42,29 +46,12 @@ layout = dcc.Tab(
             searchable=False,
         ),
         html.Br(),
-        # This container holds the map - it will be populated by draw_map
         html.Div(
-            id="map_container",
-            children=[dcc.Graph(id="map_map")],
-        ),
-
-
-        ##############################################
-        #### Insert your reports table above here ####
-        ##############################################
-
-
-
-        ##############################################
-        #### Insert your reports table below here ####
-        ##############################################
-
-
-    ],
+            id="example-graph-2",
+            children=[dcc.Graph(id="pd_df")],
+        )
+    ]
 )
-
-
-##### Insert your populate_results_table function and callback here ####
 
 
 
@@ -77,86 +64,50 @@ def load_reports(product_type):
             reports_df (pd.DataFrame): DataFrame of the results for the given product_type
     """
 
-    item_id="ZG011AQA"
-    url = f"{config['FastAPI_APP_URL']}/create-stocklevel/{item_id}"
+    url = f"{config['FastAPI_APP_URL']}/get-by-product-name"
    
     req = requests.get(url, params=dict(product_type=product_type))
     if req.status_code != 200:
         # create blank df
         reports_df = pd.DataFrame(
-            columns=["datetime", "store_names", "stock_level"]
+            columns=["store_name","product_type","stock_level","datetime"]
         )
     else:
+        data = req.json()
+        data_json = json.dumps(data)
 
-        data = req.json()["data"]
-        # get df data from request payload
-        reports_df = pd.read_json(data, orient="records")
+        # # get df data from request payload
+        reports_df = pd.read_json(data_json, orient="records")
 
 
     return reports_df
 
-
-@app.callback(
-    Output("map_map", "figure"),
+@app.callback(Output("pd_df", "figure"),
     [
-        Input("product_type_mapview_dropdown", "value"),
-    ],
+        Input("product_type_dropdown", "value"),
+    ]
 )
-def draw_map(product_type):
-    """Produces the plotly graph object to display the most recent
-    reports for each location of a given stock, centred to the user's location
-    Args:
-            product_type (str): product type for which to display stock levels
-    Returns:
-            dict (plotly.graphobject.Scattermapbox, plotly.graphobject.Layout): Plotly objects required to plot the map
-    """
-
-    logger.debug("Load map button clicked! ")
-
-    ### Replace this line with a new GET request to our API ###
+def draw_graph(product_type):
     reports_df = load_reports(product_type)
-    logger.info("Loaded results df, with %s rows", len(reports_df))
-
-    map_data = go.Scattermapbox(
-        #lat=reports_df["lat"],
-        #lon=reports_df["lng"],
-        mode="markers",
-        marker=dict(
-            size=15,
-            showscale=True,
-            color=reports_df["stock_level"],
-            cmin=0,
-            cmax=3,
-            colorscale=["black", "red", "orange", "green"],
-            colorbar=dict(
-                title="Stock level",
-                tickmode="array",
-                tickvals=[0, 1, 2, 3],
-                ticktext=["Out of stock", "Low", "Medium", "High"],
-                ticks="outside",
-                thicknessmode="fraction",
-                thickness=0.03,
-            ),
-        ),
-        hovertext=reports_df["store_names"]
-        + "<br>Last reported: "
-        + reports_df["datetime"],
-    )
-
-    client_ip = "me"
-
-    logger.debug("IP for localisation: %s", client_ip)
+    if reports_df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            xaxis =  { "visible": False },
+            yaxis = { "visible": False },
+            annotations = [
+                {   
+                    "text": "No matching product type found in any stores",
+                    "xref": "paper",
+                    "yref": "paper",
+                    "showarrow": False,
+                    "font": {
+                        "size": 28
+                    }
+                }
+            ]
+        )
+    else:
+        fig = px.bar(reports_df, x="store_name", y="stock_level", color="store_name")
+    return fig
 
 
-    logger.debug("Geocoded location from IP: %s", curr_loc)
-
-    map_layout = go.Layout(
-        mapbox_style="open-street-map",
-        margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        mapbox=dict(
-           center=go.layout.mapbox.Center(lat=curr_loc[0], lon=curr_loc[1]),
-            zoom=10,
-        ),
-    )
-
-    return {"data": [map_data], "layout": map_layout}

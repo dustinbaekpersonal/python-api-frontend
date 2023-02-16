@@ -1,7 +1,8 @@
 import logging
-import os
-import platform
+
 from datetime import datetime
+import random
+import string
 
 import dash
 import dash_core_components as dcc
@@ -120,8 +121,22 @@ layout = dcc.Tab(
                                   searchable=False,
                                 ),
                             ],
-                        ),    
-                    ],  
+                        ),
+                        html.Div(
+                            [
+                                html.Div(
+                                    [
+                                        html.Button(
+                                            "Submit", id="submit_button", n_clicks=1
+                                        ),
+                                    ],
+                                    className="col-6",
+                                    style={"padding": "15px 0px 0px 15px"},
+                                ),
+                            ],
+                            className="row justify-content-between",
+                        ),
+                    ],                        
                     className="col-12 col-md-6"
                 ),
             ], 
@@ -133,6 +148,10 @@ layout = dcc.Tab(
 
 )
 
+# not a very smart way, but whenever we create stocklevel, we need to input unique SKU id. For that we will randomly genearte 8 digits, so that front end users don't need to worry about it.
+def id_generator(size =8, char=string.ascii_uppercase+string.digits):
+    return ''.join([random.choice(char) for _ in range(size)])
+
 # This section calls back (i.e. activates the change in input) the values of the sections - product type, stock level and store names into the app
 
 @app.callback(
@@ -141,12 +160,11 @@ layout = dcc.Tab(
     [
         State("product_type_input_dropdown", "value"),
         State("stock_level_dropdown", "value"),
-        State("store_name_dropdown", "value"),
-        State("address_response_store", "data"),
+        State("store_name_dropdown", "value")
     ],
 )
 
-def submit_stocklevel(n_clicks, product_type, stock_level, store_name, address_response):
+def submit_stocklevel(n_clicks, product_type, stock_level, store_name):
     """Using our user's inputs of stock type & level, as well as the resolved address,
     put the stock report somewhere. In this case, we'll send it to our API!
     Args:
@@ -158,17 +176,16 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name, address_r
     Returns:
             str: Confirmation response to display on the screen to the user
     """
-    if not n_clicks or not input_address:
+    if not n_clicks:
         raise PreventUpdate
 
-    item_id="ZG011AQA"
+    item_id=id_generator() #randomly generate SKU for every submit
     url = f"{config['FastAPI_APP_URL']}/create-stocklevel/{item_id}"
 
     data = {
         "stock_level": stock_level,
         "product_type": product_type,
-        "store_name": store_name,
-        "datetime": datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "store_name": store_name
     }
 
     # Make request to FAST-app to add stock
@@ -177,4 +194,4 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name, address_r
         raise PreventUpdate
 
 
-    return f"Thanks for submitting the {product_type} stock level at {response['resolved_address']}!"
+    return f"Thanks for submitting the {product_type} stock level at {store_name}!"
