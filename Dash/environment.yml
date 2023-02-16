@@ -1,0 +1,13 @@
+name: dash
+
+dependencies:
+- python=3.10.0
+- black
+- flake8
+- isort
+- dash
+- pandas
+- requests
+- pip 
+- pip:
+  - Werkzeug
