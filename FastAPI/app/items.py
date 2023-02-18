@@ -14,28 +14,6 @@ initial_stock_to_csv = list(map(lambda x: submit_stocklevel(inventory.items[x]),
 async def all_stocklevels():
     return inventory.items
 
-
-# @router.get("/store_names/{store_name}")
-# async def get_store_name(store_name: StoreName):
-#      keys = [k for k,v in inventory.items.items() if v["store_name"]==store_name]
-#      if keys:
-#           return {"Store_name": store_name}
-#      raise HTTPException(status_code=404, detail="Store not found")
-
-
-@router.get("/get-item/{item_id}")
-async def get_stocklevel(item_id: str = Path(None, description="The ID of the item you would like to view")):
-    if item_id not in inventory.items.keys():
-        raise HTTPException(status_code=404, detail="Given ID does not exist")
-
-    return {
-        "Store Name is ": inventory.items[item_id]["store_name"],
-        "Product Type is": inventory.items[item_id]["product_type"],
-        "Stock Level of": inventory.items[item_id]["stock_level"],
-        "Datetime": inventory.items[item_id]["datetime"],
-    }
-
-
 @router.get("/get-by-product-name")
 async def get_item_by_product_name(product_type: str = Query(None, description="Type of item")):
     keys = [k for k, v in inventory.items.items() if v["product_type"] == product_type]
