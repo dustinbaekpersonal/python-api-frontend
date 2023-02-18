@@ -32,8 +32,8 @@ layout = dcc.Tab(
         html.Label("Product type"),
         dcc.Dropdown(
             id="product_type_dropdown",
-            options=[{"label": p.title(), "value": p.replace(" ", "_")} for p in config["product_types"]],
-            value="toilet_paper",
+            options=[{"label": p.title(), "value": p} for p in config["product_types"]],
+            value= config["product_types"][0],
             placeholder="Select stock type",
             searchable=False,
         ),
@@ -90,5 +90,7 @@ def draw_graph(product_type):
             ],
         )
     else:
-        fig = px.bar(reports_df, x="store_name", y="stock_level", color="store_name")
+        fig = px.bar(reports_df, x="store_name", y="stock_level", color="store_name",
+                     title=f"Stock Level of {product_type.title()} by Stores",
+                     labels={ "store_name":"Store Name", "stock_level":"Stock Level"})
     return fig

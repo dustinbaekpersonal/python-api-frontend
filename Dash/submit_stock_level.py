@@ -39,14 +39,8 @@ layout = dcc.Tab(
                             [
                                 dcc.Dropdown(
                                     id="product_type_input_dropdown",
-                                    options=[
-                                        {
-                                            "label": p.title(),
-                                            "value": p.replace(" ", "_"),
-                                        }
-                                        for p in config["product_types"]
-                                    ],
-                                    value="toilet_paper",
+                                    options=[{"label": p.title(), "value": p} for p in config["product_types"]],
+                                    value=config["product_types"][0],
                                     placeholder="Select stock type",
                                     searchable=False,
                                 ),
@@ -73,7 +67,7 @@ layout = dcc.Tab(
                                 dcc.Dropdown(
                                     id="stock_level_dropdown",
                                     options=[
-                                        {"label": value, "value": value} for value in config["stock_levels"]
+                                        {"label": value.split(sep=',')[0], "value": int(value.split(sep=',')[1])} for value in config["stock_levels"]
                                     ],
                                     value=None,
                                     placeholder="Select stock level",
@@ -184,4 +178,4 @@ def submit_stocklevel(n_clicks, product_type, stock_level, store_name):
     if req.status_code != 200:
         raise PreventUpdate
 
-    return f"Thanks for submitting the {product_type} stock level at {store_name}!"
+    return f"Thanks for submitting the {product_type.title()} stock level at {store_name}!"

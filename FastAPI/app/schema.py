@@ -15,7 +15,7 @@ with open("../../config.yml", "r") as stream:
 class Item(BaseModel):
     store_name: str
     product_type: str
-    stock_level: str
+    stock_level: int
 
 
 class Inventory(BaseModel):
@@ -27,13 +27,13 @@ StoreName = Enum("StoreName", {store: store for store in config["store_names"]})
 item1 = Item(
     store_name=config["store_names"][0],
     product_type=config["product_types"][1],
-    stock_level=config["stock_levels"][0],
+    stock_level=config["stock_levels"][2].split(sep=',')[1],
 )
 
 item2 = Item(
     store_name=config["store_names"][1],
     product_type=config["product_types"][0],
-    stock_level=config["stock_levels"][1],
+    stock_level=config["stock_levels"][1].split(sep=',')[1],
 )
 
 

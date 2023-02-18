@@ -9,10 +9,10 @@ product_types:
   - fresh fruit
   - fresh vegetables
 stock_levels:
-  - Out of stock
-  - Low
-  - Medium
-  - High
+  - Out of stock,0
+  - Low,1
+  - Medium,2
+  - High,3
 store_names:
   - Sainsbury's Euston
   - Sainsbury's Holborn
