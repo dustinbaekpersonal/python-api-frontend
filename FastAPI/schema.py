@@ -14,6 +14,7 @@ StoreName = Enum("StoreName", {store: store for store in config["stores"]})
 
 Product = Enum("Product", {product: product for product in config["products"]})
 
+
 class Item(BaseModel):
     product: Product
     store: StoreName
