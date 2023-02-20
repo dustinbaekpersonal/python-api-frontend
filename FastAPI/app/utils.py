@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 from typing import Dict
 
-from config import DbConfig
+DB_FILEPATH = os.getenv("CSV_FILE", "./db/stock_db.csv")
 
 def submit_stocklevel(stock_data: Dict) -> bool:
     """
@@ -22,8 +22,8 @@ def submit_stocklevel(stock_data: Dict) -> bool:
     # this is a hack for demostrative purposes only, use a SQL/ no-SQL when creating your own app and proper error handling
     # look at sql alchemy if you want to use a sql db
 
-    if os.path.exists(DbConfig["DB_FILEPATH"]):
-        db = pd.read_csv(DbConfig["DB_FILEPATH"])
+    if os.path.exists(DB_FILEPATH):
+        db = pd.read_csv(DB_FILEPATH)
     else:
         db = pd.DataFrame()
     
@@ -34,7 +34,7 @@ def submit_stocklevel(stock_data: Dict) -> bool:
     db = db.append(stock_data, ignore_index=True)
 
     # Write to the file
-    db.to_csv(DbConfig["DB_FILEPATH"], index=False)
+    db.to_csv(DB_FILEPATH, index=False)
 
     return True
 
