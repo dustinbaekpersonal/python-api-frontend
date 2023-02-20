@@ -1,11 +1,11 @@
 import logging
+import yaml
 
 import pandas as pd
 import plotly.express as px
 import requests
 import yaml
 from app import app
-
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate

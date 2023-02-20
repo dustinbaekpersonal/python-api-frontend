@@ -1,6 +1,6 @@
 from datetime import datetime
 import logging
-
+import yaml
 
 import requests
 import yaml
@@ -127,7 +127,6 @@ def submit_stocklevel(n_clicks, product, store, stock_level):
 
     url = f"{config['fastapi_url']}/submit-stocklevel"
 
-    print(product)
     data = {
         "product": product,
         "store": store,
