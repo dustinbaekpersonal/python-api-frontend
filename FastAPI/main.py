@@ -6,7 +6,6 @@ import uvicorn
 
 from fastapi import FastAPI
 
-# Initialise FastAPI App object
 app = FastAPI(title="Stock Level API")
 
 app.include_router(items.router)

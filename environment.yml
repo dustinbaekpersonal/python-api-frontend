@@ -14,10 +14,13 @@ dependencies:
   - flake8
   - isort
   - dash
+  - dash-bootstrap-components
   - pandas
   - requests
   - pyyaml
   - uvicorn
-  - pip 
+  - pip
+  - pyarrow
   - pip:
     - Werkzeug
+    - pyarrow

@@ -1,4 +1,4 @@
 **/__pycache__/
 **/.vs/
 **/.DS_Store
-
+fastapi/db

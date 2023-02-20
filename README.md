@@ -42,20 +42,3 @@ $ python main.py
 ```
 
 You should then be able to view the front end application by navigating to http://0.0.0.0:8050/ in a browser.
-
-# Python based Web Framework API using FastAPI
-
-This repository is the starting point for FastAPI and Dash course. It contains how to build an API and micro web framework using FastAPI and build a front-end web framework using Dash.
-Here you can:
-* Learn what API is
-* Learn RESTful API methods for HTTP
-* Learn how to define & parse API arguments
-* Learn how to handle the error (e.g. Server Response code: 2xx, 4xx, 5xx)
-* Learn the perks of using FastAPI(e.g.Auto-Documentation of APIs using Swagger, Auto-validation)
-
-## Examples
-These APIs are based off: https://fastapi.tiangolo.com/tutorial/
-
-## Useful Links
-What is API?: https://aws.amazon.com/what-is/api/
-
