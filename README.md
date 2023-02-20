@@ -26,7 +26,7 @@ To run the API and front end locally, you will need to have both running in two 
 In the first tab let's get the API running. 
 
 ```bash
-$ cd fastapi/app
+$ cd FastAPI
 $ uvicorn main:app --reload
 ```
 
@@ -37,7 +37,7 @@ Now open a new terminal tab (Ctrl/Command + T) and get the dash app running:
 
 ```bash
 $ conda activate fastapi-dash-training
-$ cd dash
+$ cd Dash
 $ python main.py
 ```
 
