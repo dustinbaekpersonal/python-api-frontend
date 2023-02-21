@@ -1,0 +1,26 @@
+name: fastapi-dash-training
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11
+  - fastapi
+  - attrs>=17.3.0
+  - webargs<6.0
+  - pandas>= 1.0.3
+  - black
+  - flake8
+  - isort
+  - dash
+  - dash-bootstrap-components
+  - pandas
+  - requests
+  - pyyaml
+  - uvicorn
+  - pip
+  - pyarrow
+  - pip:
+    - Werkzeug
+    - pyarrow
