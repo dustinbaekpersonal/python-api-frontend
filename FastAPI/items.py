@@ -59,7 +59,7 @@ async def put_stock_levels(item: Item) -> dict:
     return {"message": "Stock level submitted"}
 
 
-def _read_db():
+def _read_db() -> pd.DataFrame:
     """Read the database from disk or create a new one if it doesn't exist"""
     if os.path.exists(DB_FILEPATH):
         return pd.read_parquet(DB_FILEPATH)
