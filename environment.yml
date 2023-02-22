@@ -21,6 +21,10 @@ dependencies:
   - uvicorn
   - pip
   - pyarrow
+  - notebook
+  - jupyterlab
   - pip:
     - Werkzeug
     - pyarrow
+    - pip-system-certs
+    - Pillow
