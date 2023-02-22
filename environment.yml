@@ -16,6 +16,7 @@ dependencies:
   - dash
   - dash-bootstrap-components
   - pandas
+  - ipywidgets
   - requests
   - pyyaml
   - uvicorn
