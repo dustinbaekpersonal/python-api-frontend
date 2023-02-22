@@ -42,7 +42,25 @@ layout = dcc.Tab(
 @app.callback(
     Output("bar_chart", "figure"), [Input("product_type_dropdown", "value"),],
 )
-def draw_graph(product):
+def draw_graph(product: str) -> px.bar:
+    """
+    Draw a bar chart of the stock level of a product in each store
+
+    Parameters
+    ----------
+    product : str 
+        product name
+
+    Returns
+    -------
+    Plotly Figure
+        bar chart of the stock level of a product in each store
+
+    Raises
+    ------
+    PreventUpdate
+        When the API call fails
+    """
     url = f"{config['fastapi_url']}/stock-levels"
     logger.info(f"Calling {url} with product={product}")
     response = requests.get(url, params=dict(product=product))
