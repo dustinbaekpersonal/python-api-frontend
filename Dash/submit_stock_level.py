@@ -77,7 +77,7 @@ layout = dcc.Tab(
     [Input("submit_button", "n_clicks")],
     [State("product_input", "value"), State("store_input", "value"), State("stock_level_input", "value"),],
 )
-def submit_stocklevel(n_clicks, product, store, stock_level):
+def submit_stock_level(n_clicks: None | int, product: str, store: str, stock_level: int) -> str:
     """
     Submit stock level to fastapi
 
@@ -105,7 +105,7 @@ def submit_stocklevel(n_clicks, product, store, stock_level):
     if not n_clicks:
         raise PreventUpdate
 
-    url = f"{config['fastapi_url']}/submit-stocklevel"
+    url = f"{config['fastapi_url']}/stock-levels"
 
     data = {
         "product": product,
@@ -115,7 +115,7 @@ def submit_stocklevel(n_clicks, product, store, stock_level):
     }
 
     logger.info(f"Sending stock level to {url} with data: {data}")
-    req = requests.post(url, json=data)
+    req = requests.put(url, json=data)
     if req.status_code != 200:
         logger.error(f"Error submitting stock level: {req.text}")
         raise PreventUpdate
