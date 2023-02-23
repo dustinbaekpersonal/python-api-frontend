@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 import yaml
-from schema import Item, Product
+from schema import Item, Product,StoreName
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -58,6 +58,29 @@ async def put_stock_levels(item: Item) -> dict:
     db.to_parquet(DB_FILEPATH, engine="pyarrow", compression="snappy")
     return {"message": "Stock level submitted"}
 
+# ### Excercise 4: Add an API mehotd ###
+# @router.get("add/the/endpoint/here")
+# async def get_stock_levels_store(store: StoreName= Query(None, description="Store Name")) -> dict:
+#     """ Get the stock level of all products of certain store
+#     Parameters
+#     ----------
+#     store : StoreName, optional
+#         store name, by default Query(None, description="Store Name")
+
+#     Returns
+#     -------
+#     Dict
+#         dictionary of stock levels for each product for the store
+
+#     Raises
+#     ------
+#     HTTPException
+#         When the store is not found
+#     """
+#     ### Hint: Think about MultiIndex ###
+
+#     ### Complete your code here ###
+   
 
 def _read_db() -> pd.DataFrame:
     """Read the database from disk or create a new one if it doesn't exist"""
