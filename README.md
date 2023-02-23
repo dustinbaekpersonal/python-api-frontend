@@ -41,4 +41,4 @@ $ cd Dash
 $ python main.py
 ```
 
-You should then be able to view the front end application by navigating to http://0.0.0.0:8050/ in a browser.
+You should then be able to view the front end application by navigating to http://localhost:8050/ in a browser.
