@@ -5,7 +5,6 @@ import plotly.express as px
 import requests
 import yaml
 from app import app
-
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
@@ -43,27 +42,26 @@ layout = dcc.Tab(
     Output("bar_chart", "figure"), [Input("product_type_dropdown", "value"),],
 )
 def draw_graph(product: str) -> px.bar:
-    """
-    Draw a bar chart of the stock level of a product in each store
+    """Draw a bar chart of the stock level of a product in each store.
 
     Parameters
     ----------
-    product : str 
+    product : str
         product name
 
-    Returns
+    Returns:
     -------
     Plotly Figure
         bar chart of the stock level of a product in each store
 
-    Raises
+    Raises:
     ------
     PreventUpdate
         When the API call fails
     """
     url = f"{config['fastapi_url']}/stock-levels"
     logger.info(f"Calling {url} with product={product}")
-    response = requests.get(url, params=dict(product=product))
+    response = requests.get(url, params={"product": product})
     if response.status_code == 200:
         data_df = pd.DataFrame(response.json())
         fig = px.bar(

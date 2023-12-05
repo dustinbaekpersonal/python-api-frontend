@@ -1,8 +1,5 @@
-"""
-Schemas of Inventory
-"""
+"""Schemas of Inventory."""
 from enum import Enum
-from typing import List
 
 import yaml
 from pydantic import BaseModel

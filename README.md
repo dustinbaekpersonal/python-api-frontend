@@ -1,43 +1,54 @@
-# FastAPI and Dash training
+# API and Frontend
 
-Welcome to the FastAPI and Dash training! 
+This repository illustrates how to develop APIs and how web applications interact with APIs to retrieve data that user asked for.
+
+For API backend service, we use FastAPI.
+For frontend, we use Dash.
 
 ## :wrench: Developer set up
 
-To take part in the training course you will need to clone this repository and set up the local development environment. 
-
 First clone the repo. In a terminal, navigate to a folder you want to clone the code to then run:
 
+1. Clone the repo
 ```bash
-$ git clone https://github.com/danalyticsuk/python-api-frontend-training.git
+$ git clone git@github.com:dustinbaekpersonal/python-api-frontend.git
 ```
 
-We will use conda for the virtual environment for this training. To get this set up, you will need to have anaconda already installed on your machine. To set it up and activate run:
-
+2. Create virtual environment and activate
 ```bash
-$ conda env create -f environment.yml
-$ conda activate fastapi-dash-training
+python3 -m venv .venv && source .venv/bin/activate
 ```
+
+3. Install dependencies
+```bash
+make pip-tools && make pip-tools-dev
+```
+
+    _**Optional**_
+4. To run pre-commit,
+```bash
+pre-commit install
+```
+
 
 ## :computer: Local run
 
-To run the API and front end locally, you will need to have both running in two separate terminal tabs. 
+To run the API and front end locally, you will need to have both running in two separate terminal tabs.
 
-In the first tab let's get the API running. 
+In the first tab let's get the API running.
 
 ```bash
-$ cd FastAPI
+$ cd api
 $ uvicorn main:app --reload
 ```
 
-Uvicorn is ASGI web server implementation for python, and 'main:app' is calling an app object that we created within main.py file. 
+Uvicorn is ASGI web server implementation for python, and 'main:app' is calling an app object that we created within main.py file.
 '--reload' enables the restart of the server after code changes. You can navigate to http://127.0.0.1:8000/docs in a browser to see the Swagger spec for the API.
 
 Now open a new terminal tab (Ctrl/Command + T) and get the dash app running:
 
 ```bash
-$ conda activate fastapi-dash-training
-$ cd Dash
+$ cd frontend
 $ python main.py
 ```
 

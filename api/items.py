@@ -2,9 +2,8 @@ import os
 
 import pandas as pd
 import yaml
-from schema import Item, Product,StoreName
-
 from fastapi import APIRouter, HTTPException, Query
+from schema import Item, Product
 
 DB_FILEPATH = "db/stock_levels.parquet"
 
@@ -16,19 +15,19 @@ router = APIRouter()
 
 @router.get("/stock-levels")
 async def get_stock_levels(product: Product = Query(None, description="Product type")) -> dict:
-    """Get the stock level of a product in a store
+    """Get the stock level of a product in a store.
 
     Parameters
     ----------
     product : Product, optional
         product name, by default Query(None, description="Type of item")
 
-    Returns
+    Returns:
     -------
     Dict
         dictionary of stock levels for each store for the product
 
-    Raises
+    Raises:
     ------
     HTTPException
         When the product is not found
@@ -41,14 +40,14 @@ async def get_stock_levels(product: Product = Query(None, description="Product t
 
 @router.put("/stock-levels")
 async def put_stock_levels(item: Item) -> dict:
-    """Update the stock level of a product in a store
-    
+    """Update the stock level of a product in a store.
+
     Parameters
     ----------
     item : Item
         Item object containing the product, store, stock level and datetime
-    
-    Returns
+
+    Returns:
     -------
     Dict
         message confirming the stock level was submitted
@@ -80,10 +79,10 @@ async def put_stock_levels(item: Item) -> dict:
 #     ### Hint: Think about MultiIndex ###
 
 #     ### Complete your code here ###
-   
+
 
 def _read_db() -> pd.DataFrame:
-    """Read the database from disk or create a new one if it doesn't exist"""
+    """Read the database from disk or create a new one if it doesn't exist."""
     if os.path.exists(DB_FILEPATH):
         return pd.read_parquet(DB_FILEPATH)
     os.makedirs(os.path.dirname(DB_FILEPATH), exist_ok=True)
