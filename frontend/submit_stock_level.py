@@ -5,7 +5,6 @@ import dash_bootstrap_components as dbc
 import requests
 import yaml
 from app import app
-
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
@@ -78,8 +77,7 @@ layout = dcc.Tab(
     [State("product_input", "value"), State("store_input", "value"), State("stock_level_input", "value"),],
 )
 def submit_stock_level(n_clicks: None | int, product: str, store: str, stock_level: int) -> str:
-    """
-    Submit stock level to fastapi
+    """Submit stock level to fastapi.
 
     Parameters
     ----------
@@ -92,12 +90,12 @@ def submit_stock_level(n_clicks: None | int, product: str, store: str, stock_lev
     stock_level : int
         Stock level
 
-    Returns
+    Returns:
     -------
     str
         Confirmation message
 
-    Raises
+    Raises:
     ------
     PreventUpdate
         If n_clicks is 0

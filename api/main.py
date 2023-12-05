@@ -1,9 +1,6 @@
-"""
-Main file for the template application
-"""
+"""Main file for the template application."""
 import items
 import uvicorn
-
 from fastapi import FastAPI
 
 app = FastAPI(title="Stock Level API")
