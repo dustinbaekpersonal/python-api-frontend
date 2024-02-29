@@ -1,3 +1,4 @@
+"""Main script."""
 import logging
 
 import submit_stock_level
@@ -7,7 +8,9 @@ from dash import dcc, html
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s", datefmt="%d/%m/%Y %H:%M:%S", level="DEBUG",
+    format="%(asctime)s : %(levelname)s : %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    level="DEBUG",
 )
 
 
@@ -21,7 +24,12 @@ app.layout = html.Div(
                         html.H4(children="""Help people find important supplies"""),
                         html.Div(id="dummy", children=None),
                         html.Br(),
-                        dcc.Tabs([submit_stock_level.layout, view_stock_level.layout,]),
+                        dcc.Tabs(
+                            [
+                                submit_stock_level.layout,
+                                view_stock_level.layout,
+                            ]
+                        ),
                         html.Div(style={"height": "50%"}),
                         html.Footer("Icon made by Freepik from www.flaticon.com"),
                     ],

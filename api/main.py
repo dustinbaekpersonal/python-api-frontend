@@ -10,6 +10,7 @@ app.include_router(items.router)
 
 @app.get("/")
 async def root():
+    """Root api endpoint."""
     return {"message": "Welcome to FastAPI Course!"}
 
 

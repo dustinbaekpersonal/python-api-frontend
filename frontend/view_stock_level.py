@@ -1,3 +1,4 @@
+"""View stock level."""
 import logging
 
 import pandas as pd
@@ -15,7 +16,9 @@ with open("../config.yml", "r") as stream:
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s", datefmt="%d/%m/%Y %H:%M:%S", level="DEBUG",
+    format="%(asctime)s : %(levelname)s : %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    level="DEBUG",
 )
 
 colors = {"background": "#111111", "text": "#7FDBFF"}
@@ -33,13 +36,18 @@ layout = dcc.Tab(
             searchable=False,
         ),
         html.Br(),
-        html.Div([dcc.Graph(id="bar_chart")],),
+        html.Div(
+            [dcc.Graph(id="bar_chart")],
+        ),
     ],
 )
 
 
 @app.callback(
-    Output("bar_chart", "figure"), [Input("product_type_dropdown", "value"),],
+    Output("bar_chart", "figure"),
+    [
+        Input("product_type_dropdown", "value"),
+    ],
 )
 def draw_graph(product: str) -> px.bar:
     """Draw a bar chart of the stock level of a product in each store.

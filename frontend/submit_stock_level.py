@@ -1,3 +1,4 @@
+"""Submit stock level."""
 import logging
 from datetime import datetime
 
@@ -14,7 +15,9 @@ with open("../config.yml", "r") as stream:
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s", datefmt="%d/%m/%Y %H:%M:%S", level="DEBUG",
+    format="%(asctime)s : %(levelname)s : %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    level="DEBUG",
 )
 
 layout = dcc.Tab(
@@ -28,7 +31,9 @@ layout = dcc.Tab(
                     html.Label("Product type"),
                     dcc.Dropdown(
                         id="product_input",
-                        options=[{"label": p.title(), "value": p} for p in config["products"]],
+                        options=[
+                            {"label": p.title(), "value": p} for p in config["products"]
+                        ],
                         placeholder="Select stock type",
                         searchable=False,
                     ),
@@ -42,7 +47,12 @@ layout = dcc.Tab(
                     html.Br(),
                     html.Label("Stock level"),
                     html.Br(),
-                    dcc.Input(id="stock_level_input", type="number", placeholder="Enter stock level", min=0,),
+                    dcc.Input(
+                        id="stock_level_input",
+                        type="number",
+                        placeholder="Enter stock level",
+                        min=0,
+                    ),
                 ],
                 width=6,
             )
@@ -55,7 +65,13 @@ layout = dcc.Tab(
                     html.Br(),
                     dcc.Dropdown(
                         id="store_input",
-                        options=[{"label": store, "value": store,} for store in config["stores"]],
+                        options=[
+                            {
+                                "label": store,
+                                "value": store,
+                            }
+                            for store in config["stores"]
+                        ],
                         placeholder="Select store name",
                         searchable=False,
                     ),
@@ -74,9 +90,15 @@ layout = dcc.Tab(
 @app.callback(
     Output("submit_confirmation", "children"),
     [Input("submit_button", "n_clicks")],
-    [State("product_input", "value"), State("store_input", "value"), State("stock_level_input", "value"),],
+    [
+        State("product_input", "value"),
+        State("store_input", "value"),
+        State("stock_level_input", "value"),
+    ],
 )
-def submit_stock_level(n_clicks: None | int, product: str, store: str, stock_level: int) -> str:
+def submit_stock_level(
+    n_clicks: None | int, product: str, store: str, stock_level: int
+) -> str:
     """Submit stock level to fastapi.
 
     Parameters

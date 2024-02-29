@@ -21,7 +21,7 @@ repos:
     hooks:
       - id: mypy
         verbose: true
-        args: [--show-error-codes, --install-types, --ignore-missing-imports]
+        args: [--show-error-codes, --ignore-missing-imports]
 
   # Prettier
   - repo: https://github.com/pre-commit/mirrors-prettier
