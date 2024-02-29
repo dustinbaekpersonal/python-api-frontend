@@ -34,20 +34,14 @@ convention="google"
 
 [tool.pytest.ini_options]
 addopts = """
+-v --cov=src \
 --cov-report term-missing \
---cov src/ -ra
 --cov-report xml:coverage.xml
 """
-
-python_files=[
-    "test_*.py",
-]
-testpaths = [
-    "tests",
-]
 pythonpath = [
-    "src",
+  ".", "api",
 ]
+
 
 [tool.coverage.report]
 exclude_also = [
