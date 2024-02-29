@@ -1,21 +1,30 @@
 """Schemas of Inventory."""
 from enum import Enum
 
-import yaml
 from pydantic import BaseModel
 
-with open("../config.yml", "r") as stream:
-    config = yaml.safe_load(stream)
+config = {
+    "products": [
+        "milk",
+        "bread",
+        "fruit",
+        "vegetables"
+    ],
+    "stores": [
+        "Sainsbury's Euston",
+        "Sainsbury's Holborn",
+        "Sainsbury's Soho",
+        "Sainsbury's Barbican"
+    ]
+}
 
-StoreName = Enum( #type: ignore
-    "StoreName",
-    {store: store for store in config["stores"]}
-    )
+StoreName = Enum(  # type: ignore
+    "StoreName", {store: store for store in config["stores"]}
+)
 
-Product = Enum( #type: ignore
-    "Product",
-    {product: product for product in config["products"]}
-    )
+Product = Enum(  # type: ignore
+    "Product", {product: product for product in config["products"]}
+)
 
 
 class Item(BaseModel):

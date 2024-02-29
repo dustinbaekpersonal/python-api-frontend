@@ -2,14 +2,25 @@
 import os
 
 import pandas as pd
-import yaml
 from fastapi import APIRouter, HTTPException, Query
 from schema import Item, Product, StoreName
 
 DB_FILEPATH = "db/stock_levels.parquet"
 
-with open("../config.yml", "r") as stream:
-    config = yaml.safe_load(stream)
+config = {
+    "products": [
+        "milk",
+        "bread",
+        "fruit",
+        "vegetables"
+    ],
+    "stores": [
+        "Sainsbury's Euston",
+        "Sainsbury's Holborn",
+        "Sainsbury's Soho",
+        "Sainsbury's Barbican"
+    ]
+}
 
 router = APIRouter()
 
