@@ -24,7 +24,6 @@ python3 -m venv .venv && source .venv/bin/activate
 make pip-tools && make pip-tools-dev
 ```
 
-    _**Optional**_
 4. To run pre-commit,
 ```bash
 pre-commit install
