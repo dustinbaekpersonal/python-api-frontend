@@ -4,18 +4,13 @@ from enum import Enum
 from pydantic import BaseModel
 
 config = {
-    "products": [
-        "milk",
-        "bread",
-        "fruit",
-        "vegetables"
-    ],
+    "products": ["milk", "bread", "fruit", "vegetables"],
     "stores": [
         "Sainsbury's Euston",
         "Sainsbury's Holborn",
         "Sainsbury's Soho",
-        "Sainsbury's Barbican"
-    ]
+        "Sainsbury's Barbican",
+    ],
 }
 
 StoreName = Enum(  # type: ignore

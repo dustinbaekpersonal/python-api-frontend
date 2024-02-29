@@ -42,7 +42,6 @@ pythonpath = [
   ".", "api",
 ]
 
-
 [tool.coverage.report]
 exclude_also = [
     "def main",

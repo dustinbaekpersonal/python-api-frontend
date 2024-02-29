@@ -10,18 +10,13 @@ from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
 config = {
-    "products": [
-        "milk",
-        "bread",
-        "fruit",
-        "vegetables"
-    ],
+    "products": ["milk", "bread", "fruit", "vegetables"],
     "stores": [
         "Sainsbury's Euston",
         "Sainsbury's Holborn",
         "Sainsbury's Soho",
-        "Sainsbury's Barbican"
-    ]
+        "Sainsbury's Barbican",
+    ],
 }
 
 
