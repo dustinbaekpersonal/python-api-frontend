@@ -4,14 +4,25 @@ import logging
 import pandas as pd
 import plotly.express as px
 import requests
-import yaml
 from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
-with open("../config.yml", "r") as stream:
-    config = yaml.safe_load(stream)
+config = {
+    "products": [
+        "milk",
+        "bread",
+        "fruit",
+        "vegetables"
+    ],
+    "stores": [
+        "Sainsbury's Euston",
+        "Sainsbury's Holborn",
+        "Sainsbury's Soho",
+        "Sainsbury's Barbican"
+    ]
+}
 
 
 logger = logging.getLogger(__name__)
