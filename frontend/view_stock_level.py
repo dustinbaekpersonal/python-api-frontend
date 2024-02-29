@@ -78,7 +78,7 @@ def draw_graph(product: str) -> px.bar:
     PreventUpdate
         When the API call fails
     """
-    url = f"{config['fastapi_url']}/stock-levels"
+    url = "http://localhost:8000/stock-levels"
     logger.info(f"Calling {url} with product={product}")
     response = requests.get(url, params={"product": product})
     if response.status_code == 200:

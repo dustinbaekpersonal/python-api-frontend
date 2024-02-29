@@ -136,7 +136,7 @@ def submit_stock_level(
     if not n_clicks:
         raise PreventUpdate
 
-    url = f"{config['fastapi_url']}/stock-levels"
+    url = "http://localhost:8000/stock-levels"
 
     data = {
         "product": product,
