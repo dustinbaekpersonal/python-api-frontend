@@ -97,7 +97,11 @@ async def get_stock_levels_store(
     ### Hint: Think about MultiIndex ###
 
     ### Complete your code here ###
-    return {}
+    if store.name not in config["stores"]:
+        raise HTTPException(status_code=404, detail="Store not found")
+    db = _read_db()
+    db = db.xs(store.name, level=1)
+    return db.fillna("").to_dict()
 
 
 def _read_db() -> pd.DataFrame:
