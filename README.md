@@ -16,12 +16,12 @@ $ git clone git@github.com:dustinbaekpersonal/python-api-frontend.git
 
 2. Create virtual environment and activate
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
+make uv-setup && source .venv/bin/activate
 ```
 
 3. Install dependencies
 ```bash
-make pip-tools && make pip-tools-dev
+make uv-dev
 ```
 
 4. To run pre-commit,

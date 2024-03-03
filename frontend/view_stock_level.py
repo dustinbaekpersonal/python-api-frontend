@@ -1,21 +1,30 @@
+"""View stock level."""
 import logging
 
 import pandas as pd
 import plotly.express as px
 import requests
-import yaml
 from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
-with open("../config.yml", "r") as stream:
-    config = yaml.safe_load(stream)
+config = {
+    "products": ["milk", "bread", "fruit", "vegetables"],
+    "stores": [
+        "Sainsbury's Euston",
+        "Sainsbury's Holborn",
+        "Sainsbury's Soho",
+        "Sainsbury's Barbican",
+    ],
+}
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s", datefmt="%d/%m/%Y %H:%M:%S", level="DEBUG",
+    format="%(asctime)s : %(levelname)s : %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    level="DEBUG",
 )
 
 colors = {"background": "#111111", "text": "#7FDBFF"}
@@ -33,13 +42,18 @@ layout = dcc.Tab(
             searchable=False,
         ),
         html.Br(),
-        html.Div([dcc.Graph(id="bar_chart")],),
+        html.Div(
+            [dcc.Graph(id="bar_chart")],
+        ),
     ],
 )
 
 
 @app.callback(
-    Output("bar_chart", "figure"), [Input("product_type_dropdown", "value"),],
+    Output("bar_chart", "figure"),
+    [
+        Input("product_type_dropdown", "value"),
+    ],
 )
 def draw_graph(product: str) -> px.bar:
     """Draw a bar chart of the stock level of a product in each store.
@@ -59,7 +73,7 @@ def draw_graph(product: str) -> px.bar:
     PreventUpdate
         When the API call fails
     """
-    url = f"{config['fastapi_url']}/stock-levels"
+    url = "http://localhost:8000/stock-levels"
     logger.info(f"Calling {url} with product={product}")
     response = requests.get(url, params={"product": product})
     if response.status_code == 200:
