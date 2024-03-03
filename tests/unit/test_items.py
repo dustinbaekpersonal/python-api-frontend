@@ -54,7 +54,8 @@ def test_get_stock_levels(
     assert response.json() == expected_response
 
 
-## TODO: Ideally we should patch _read_db function
+
+# # TODO: Ideally we should patch _read_db function
 # def test_get_stock_levels_db(monkeypatch: pytest.MonkeyPatch) -> None:
 #     """Unit test for get_stock_levels to read from database."""
 #     def replace_read_db() -> pd.DataFrame:
@@ -70,4 +71,8 @@ def test_get_stock_levels(
 #     monkeypatch.setattr("api.items._read_db", replace_read_db)
 #     response = client.get("/stock-levels", params={"product":"milk"})
 #     assert response.status_code == 200
-#     assert response.json() == {"asdf":'asdf'}
+#     assert response.json() == {
+#         "stock_level":'10',
+#         "datetime": '20',
+#         }
+
