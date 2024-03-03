@@ -10,7 +10,7 @@ client = TestClient(app)
 
 
 @pytest.mark.parametrize(
-    "store_id, expected_status, expected_response",
+    "store_name, expected_status, expected_response",
     [
         (
             "Waitrose",
@@ -32,7 +32,7 @@ client = TestClient(app)
         ),  # wrong API call
     ],
 )
-def test_get_stock_levels_by_store_id(
+def test_get_stock_levels_by_store_name(
     store_name: str,
     expected_status: int,
     expected_response: dict[str,Any]
