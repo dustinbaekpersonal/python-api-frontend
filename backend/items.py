@@ -24,7 +24,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@router.get("/get_inventory/{store_id}")
+@router.get("/inventory/{store_id}")
 async def fetch_product_by_store_id(store_id: str, db: db_dependency):
     """Read product stock level by store_id."""
     result = db.query(Product).filter(Product.store_id == store_id).all()
@@ -33,7 +33,7 @@ async def fetch_product_by_store_id(store_id: str, db: db_dependency):
     return result
 
 
-@router.post("/create_inventory/")
+@router.post("/inventory/")
 async def create_inventory(inventory: Inventory, db: db_dependency):
     """Create store and product object in Postgresql database."""
     db_store = Store(store_name=inventory.store_name)

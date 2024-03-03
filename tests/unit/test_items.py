@@ -8,48 +8,32 @@ client = TestClient(app)
 
 
 @pytest.mark.parametrize(
-    "product, expected_status, expected_response",
+    "store_id, expected_status, expected_response",
     [
         (
-            "milk",
+            "1",
             200,
-            {
-                "stock_level": {
-                    "Sainsbury's Euston": "",
-                    "Sainsbury's Holborn": "",
-                    "Sainsbury's Soho": "",
-                    "Sainsbury's Barbican": "",
+            [
+                {'created_date': '2024-03-03T19:39:00.933000',
+                'id': 1,
+                'product_name': 'milk',
+                'stock_level': 10,
+                'store_id': 1
                 },
-                "datetime": {
-                    "Sainsbury's Euston": "",
-                    "Sainsbury's Holborn": "",
-                    "Sainsbury's Soho": "",
-                    "Sainsbury's Barbican": "",
-                },
-            },
+            ],
         ),  # successful API call
         (
-            "cup",
-            422,
+            "3",
+            404,
             {
-                "detail": [
-                    {
-                        "ctx": {"expected": "'milk', 'bread', 'fruit' or 'vegetables'"},
-                        "input": "cup",
-                        "loc": ["query", "product"],
-                        "msg": "Input should be 'milk', 'bread', 'fruit' or 'vegetables'",
-                        "type": "enum",
-                    }
-                ]
+                "detail": "Store is not found."
             },
         ),  # wrong API call
     ],
 )
-def test_get_stock_levels(
-    product: str, expected_status: int, expected_response: dict
-) -> None:
+def test_get_stock_levels_by_store_id(store_id, expected_status, expected_response) -> None:
     """Unit test for get_stock_levels."""
-    response = client.get("/stock-levels", params={"product": product})
+    response = client.get(f"/inventory/{store_id}/")
     assert response.status_code == expected_status
     assert response.json() == expected_response
 
