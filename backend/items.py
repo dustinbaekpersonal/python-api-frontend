@@ -1,6 +1,7 @@
 """API calls defined."""
 from typing import Annotated
 
+import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -29,20 +30,28 @@ db_dependency = Annotated[Session, Depends(get_db)]
 async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     """Read product stock level by store_id."""
     # Check if the store exists
-    store = db.query(Store).filter(Store.store_name == store_name).first()
+    store = db.query(Store).filter(Store.store_name == store_name).all()
     if not store:
         raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
-
-    result = (
-        db.query(Product)
-        .filter(Product.store_id == store.id, Store.store_name == store_name)
-        .all()
-    )
-    if not result:
-        raise HTTPException(
-            status_code=404, detail=f"Store {store_name} does not have any inventory."
+    results: list = []
+    for s in store:
+        result = (
+            db.query(Product)
+            .filter(Product.store_id == s.id, Store.store_name == store_name)
+            .all()
         )
-    return result
+        if not result:
+            raise HTTPException(
+                status_code=404, detail=f"Store {store_name} does not have any inventory."
+            )
+        results.append(*result)
+    return results
+    # only retrieve product_name and stock_level
+    df = pd.DataFrame(results)
+    # df = df.columns
+    return df.to_dict()
+    df = df[["product_name", "stock_level"]].set_index("product_name")
+    return df.fillna("").to_dict()
 
 
 @router.post("/inventory/")

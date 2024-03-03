@@ -13,7 +13,7 @@ class Store(Base):
     __tablename__ = "stores"
 
     id = Column(Integer, primary_key=True)
-    store_name = Column(String, unique=True, index=True)
+    store_name = Column(String, index=True)
 
     products = relationship("Product", back_populates="store")
 
