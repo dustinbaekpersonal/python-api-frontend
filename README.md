@@ -37,7 +37,7 @@ To run the API and front end locally, you will need to have both running in two 
 In the first tab let's get the API running.
 
 ```bash
-$ cd api
+$ cd app
 $ uvicorn main:app --reload
 ```
 
