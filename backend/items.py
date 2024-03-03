@@ -4,7 +4,7 @@ from typing import Annotated
 from database import Base, SessionLocal, engine
 from fastapi import APIRouter, Depends, HTTPException
 from models import Product, Store
-from schema import Inventory
+from schema import AllowedStoreNames, Inventory
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -36,6 +36,12 @@ async def fetch_product_by_store_id(store_id: str, db: db_dependency):
 @router.post("/inventory/")
 async def create_inventory(inventory: Inventory, db: db_dependency):
     """Create store and product object in Postgresql database."""
+    if inventory.store_name not in AllowedStoreNames.__members__:
+        raise HTTPException(
+            status_code=400,
+            detail=
+            f"Invalid store name. Store name should be {AllowedStoreNames.__members__}"
+            )
     db_store = Store(store_name=inventory.store_name)
     db.add(db_store)
     db.commit()
