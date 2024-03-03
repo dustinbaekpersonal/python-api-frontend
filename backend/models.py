@@ -25,7 +25,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     product_name = Column(String, index=True)
     stock_level = Column(Integer, default=0)
-    created_date = Column(DateTime, default=datetime.utcnow)
+    updated_date = Column(DateTime, default=datetime.utcnow)
     store_id = Column(Integer, ForeignKey("stores.id"), nullable=False)
 
     store = relationship("Store", back_populates="products")

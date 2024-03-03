@@ -14,20 +14,19 @@ client = TestClient(app)
             "1",
             200,
             [
-                {'created_date': '2024-03-03T19:39:00.933000',
-                'id': 1,
-                'product_name': 'milk',
-                'stock_level': 10,
-                'store_id': 1
+                {
+                    "created_date": "2024-03-03T19:39:00.933000",
+                    "id": 1,
+                    "product_name": "milk",
+                    "stock_level": 10,
+                    "store_id": 1,
                 },
             ],
         ),  # successful API call
         (
             "3",
             404,
-            {
-                "detail": "Store is not found."
-            },
+            {"detail": "Store is not found."},
         ),  # wrong API call
     ],
 )
