@@ -1,1 +1,1 @@
-"""init.py for api."""
+"""init.py for backend api endpoints."""

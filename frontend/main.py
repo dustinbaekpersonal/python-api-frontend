@@ -3,8 +3,8 @@ import logging
 
 from dash import dcc, html
 
-from backend.main import app
 from frontend import submit_stock_level, view_stock_level
+from frontend.app import app
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(

@@ -1,7 +1,8 @@
 """Main file for the template application."""
 import uvicorn
 from fastapi import FastAPI
-from items import router
+
+from backend.items import router
 
 app = FastAPI(title="Stock Level API")
 

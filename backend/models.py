@@ -1,9 +1,10 @@
 """Define declarative models for ORM."""
 from datetime import datetime
 
-from database import Base
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
+from backend.database import Base
 
 
 class Store(Base):

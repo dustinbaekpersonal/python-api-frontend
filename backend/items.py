@@ -1,11 +1,12 @@
 """API calls defined."""
 from typing import Annotated
 
-from database import Base, SessionLocal, engine
 from fastapi import APIRouter, Depends, HTTPException
-from models import Product, Store
-from schema import Inventory
 from sqlalchemy.orm import Session
+
+from backend.database import Base, SessionLocal, engine
+from backend.models import Product, Store
+from backend.schema import Inventory
 
 router = APIRouter()
 

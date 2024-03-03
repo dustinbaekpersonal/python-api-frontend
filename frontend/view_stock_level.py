@@ -8,7 +8,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
-from backend.main import app
+from frontend.app import app
 
 config = {
     "products": ["milk", "bread", "fruit"],
@@ -34,11 +34,11 @@ layout = dcc.Tab(
     children=[
         html.Br(),
         html.H2("View local stock levels"),
-        html.Label("Product type"),
+        html.Label("Store name"),
         dcc.Dropdown(
-            id="product_type_dropdown",
-            options=[{"label": p.title(), "value": p} for p in config["products"]],
-            value=config["products"][0],
+            id="store_name_dropdown",
+            options=[{"label": p.title(), "value": p} for p in config["stores"]],
+            value=config["stores"][0],
             searchable=False,
         ),
         html.Br(),
@@ -52,7 +52,7 @@ layout = dcc.Tab(
 @app.callback(
     Output("bar_chart", "figure"),
     [
-        Input("product_type_dropdown", "value"),
+        Input("store_name_dropdown", "value"),
     ],
 )
 def draw_graph(store_name: str) -> px.bar:
@@ -73,17 +73,17 @@ def draw_graph(store_name: str) -> px.bar:
     PreventUpdate
         When the API call fails
     """
-    url = "http://localhost:8000/inventory"
+    url = f"http://localhost:8000/inventory/{store_name}"
     logger.info(f"Calling {url} with store name ={store_name}")
-    response = requests.get(url, params={"store_name": store_name})
+    response = requests.get(url)
     if response.status_code == 200:
         data_df = pd.DataFrame(response.json())
         fig = px.bar(
             data_df,
             x=data_df.index,
             y="stock_level",
-            title=f"Stock Level of {store_name.title()} by store",
-            labels={"stock_level": "Stock Level", "index": "Store"},
+            title=f"Stock Level of {store_name.title()} by product",
+            labels={"stock_level": "Stock Level", "index": "Product"},
         )
         return fig
     else:

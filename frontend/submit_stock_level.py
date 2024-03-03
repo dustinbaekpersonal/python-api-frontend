@@ -8,7 +8,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from backend.main import app
+from frontend.app import app
 
 config = {
     "products": ["milk", "bread", "fruit"],
