@@ -34,12 +34,12 @@ convention="google"
 
 [tool.pytest.ini_options]
 addopts = """
--v --cov=api \
+-v --cov=backend \
 --cov-report term-missing \
 --cov-report xml:coverage.xml
 """
 pythonpath = [
-  ".", "api",
+  ".", "backend",
 ]
 
 [tool.coverage.report]
