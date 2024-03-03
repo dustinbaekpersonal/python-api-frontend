@@ -3,8 +3,9 @@ import logging
 
 import submit_stock_level
 import view_stock_level
-from app import app
 from dash import dcc, html
+
+from backend.main import app
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(

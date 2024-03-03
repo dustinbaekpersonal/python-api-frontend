@@ -4,10 +4,11 @@ from datetime import datetime
 
 import dash_bootstrap_components as dbc
 import requests
-from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+
+from backend.main import app
 
 config = {
     "products": ["milk", "bread", "fruit", "vegetables"],

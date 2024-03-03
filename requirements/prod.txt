@@ -72,6 +72,7 @@ pydantic-core==2.14.5
     # via pydantic
 python-dateutil==2.8.2
     # via pandas
+python-dotenv==1.0.1
 pytz==2023.3.post1
     # via pandas
 pyyaml==6.0.1

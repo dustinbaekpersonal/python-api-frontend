@@ -2,7 +2,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -54,7 +54,6 @@ def test_get_stock_levels(
     assert response.json() == expected_response
 
 
-
 # # TODO: Ideally we should patch _read_db function
 # def test_get_stock_levels_db(monkeypatch: pytest.MonkeyPatch) -> None:
 #     """Unit test for get_stock_levels to read from database."""
@@ -75,4 +74,3 @@ def test_get_stock_levels(
 #         "stock_level":'10',
 #         "datetime": '20',
 #         }
-
