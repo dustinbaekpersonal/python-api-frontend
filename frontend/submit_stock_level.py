@@ -11,12 +11,11 @@ from dash.exceptions import PreventUpdate
 from backend.main import app
 
 config = {
-    "products": ["milk", "bread", "fruit", "vegetables"],
+    "products": ["milk", "bread", "fruit"],
     "stores": [
-        "Sainsbury's Euston",
-        "Sainsbury's Holborn",
-        "Sainsbury's Soho",
-        "Sainsbury's Barbican",
+        "Waitrose",
+        "Sainsbury's",
+        "Aldi",
     ],
 }
 
@@ -132,13 +131,23 @@ def submit_stock_level(
     if not n_clicks:
         raise PreventUpdate
 
-    url = "http://localhost:8000/stock-levels"
+    url = "http://localhost:8000/inventory"
 
+    # data = {
+    #     "product_name": product,
+    #     "store_name": store,
+    #     "stock_level": stock_level,
+    #     "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    # }
     data = {
-        "product": product,
-        "store": store,
-        "stock_level": stock_level,
-        "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "store_name": store,
+        "product_name": [
+            {
+            "product_name": product,
+            "stock_level": stock_level,
+            "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+        ]
     }
 
     logger.info(f"Sending stock level to {url} with data: {data}")

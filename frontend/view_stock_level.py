@@ -11,12 +11,11 @@ from dash.exceptions import PreventUpdate
 from backend.main import app
 
 config = {
-    "products": ["milk", "bread", "fruit", "vegetables"],
+    "products": ["milk", "bread", "fruit"],
     "stores": [
-        "Sainsbury's Euston",
-        "Sainsbury's Holborn",
-        "Sainsbury's Soho",
-        "Sainsbury's Barbican",
+        "Waitrose",
+        "Sainsbury's",
+        "Aldi",
     ],
 }
 
@@ -56,13 +55,13 @@ layout = dcc.Tab(
         Input("product_type_dropdown", "value"),
     ],
 )
-def draw_graph(product: str) -> px.bar:
-    """Draw a bar chart of the stock level of a product in each store.
+def draw_graph(store_name: str) -> px.bar:
+    """Draw a bar chart of the stock level of all products in given store.
 
     Parameters
     ----------
-    product : str
-        product name
+    store_name : str
+        store name
 
     Returns:
     -------
@@ -74,16 +73,16 @@ def draw_graph(product: str) -> px.bar:
     PreventUpdate
         When the API call fails
     """
-    url = "http://localhost:8000/stock-levels"
-    logger.info(f"Calling {url} with product={product}")
-    response = requests.get(url, params={"product": product})
+    url = "http://localhost:8000/inventory"
+    logger.info(f"Calling {url} with store name ={store_name}")
+    response = requests.get(url, params={"store_name": store_name})
     if response.status_code == 200:
         data_df = pd.DataFrame(response.json())
         fig = px.bar(
             data_df,
             x=data_df.index,
             y="stock_level",
-            title=f"Stock Level of {product.title()} by store",
+            title=f"Stock Level of {store_name.title()} by store",
             labels={"stock_level": "Stock Level", "index": "Store"},
         )
         return fig
