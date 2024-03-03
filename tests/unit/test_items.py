@@ -1,4 +1,6 @@
 """Test for items.py."""
+from typing import Any
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -11,28 +13,32 @@ client = TestClient(app)
     "store_id, expected_status, expected_response",
     [
         (
-            "1",
+            "Waitrose",
             200,
             [
                 {
-                    "created_date": "2024-03-03T19:39:00.933000",
                     "id": 1,
                     "product_name": "milk",
-                    "stock_level": 10,
+                    "stock_level": 0,
                     "store_id": 1,
+                    "updated_date": "2024-03-03T21:41:00.529000"
                 },
             ],
         ),  # successful API call
         (
-            "3",
+            "Aldi",
             404,
-            {"detail": "Store is not found."},
+            {'detail': "Store 'Aldi' not found."},
         ),  # wrong API call
     ],
 )
-def test_get_stock_levels_by_store_id(store_id, expected_status, expected_response) -> None:
+def test_get_stock_levels_by_store_id(
+    store_name: str,
+    expected_status: int,
+    expected_response: dict[str,Any]
+) -> None:
     """Unit test for get_stock_levels."""
-    response = client.get(f"/inventory/{store_id}/")
+    response = client.get(f"/inventory/{store_name}/")
     assert response.status_code == expected_status
     assert response.json() == expected_response
 
