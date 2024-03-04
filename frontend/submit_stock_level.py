@@ -133,25 +133,21 @@ def submit_stock_level(
 
     url = "http://localhost:8000/inventory"
 
-    # data = {
-    #     "product_name": product,
-    #     "store_name": store,
-    #     "stock_level": stock_level,
-    #     "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    # }
     data = {
         "store_name": store,
         "product_name": [
             {
-            "product_name": product,
-            "stock_level": stock_level,
-            "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                "product_name": product,
+                "stock_level": stock_level,
+                "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
-        ]
+        ],
     }
 
     logger.info(f"Sending stock level to {url} with data: {data}")
+
     req = requests.put(url, json=data)
+
     if req.status_code != 200:
         logger.error(f"Error submitting stock level: {req.text}")
         raise PreventUpdate

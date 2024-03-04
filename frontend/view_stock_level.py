@@ -78,6 +78,7 @@ def draw_graph(store_name: str) -> px.bar:
     response = requests.get(url)
     if response.status_code == 200:
         data_df = pd.DataFrame(response.json())
+        data_df = data_df[["product_name", "stock_level"]].set_index("product_name")
         fig = px.bar(
             data_df,
             x=data_df.index,

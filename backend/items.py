@@ -1,13 +1,20 @@
 """API calls defined."""
+import logging
 from typing import Annotated
 
-import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend.database import Base, SessionLocal, engine
 from backend.models import Product, Store
 from backend.schema import Inventory
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    format="%(asctime)s : %(levelname)s : %(message)s",
+    datefmt="%d/%m/%Y %H:%M:%S",
+    level="DEBUG",
+)
 
 router = APIRouter()
 
@@ -31,30 +38,31 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     """Read product stock level by store_id."""
     # Check if the store exists
     store = db.query(Store).filter(Store.store_name == store_name).all()
+    if len(store) > 1:
+        logger.debug(f"This is store object {store}.")
+        raise HTTPException(
+            status_code=500, detail=f"Store name {store_name} cannot be duplicated."
+        )
+
     if not store:
         raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
-    results: list = []
-    for s in store:
-        result = (
-            db.query(Product)
-            .filter(Product.store_id == s.id, Store.store_name == store_name)
-            .all()
+
+    store = store[0]
+
+    result = (
+        db.query(Product)
+        .filter(Product.store_id == store.id, Store.store_name == store_name)
+        .all()
+    )
+
+    if not result:
+        raise HTTPException(
+            status_code=404, detail=f"Store {store_name} does not have any inventory."
         )
-        if not result:
-            raise HTTPException(
-                status_code=404, detail=f"Store {store_name} does not have any inventory."
-            )
-        results.append(*result)
-    return results
-    # only retrieve product_name and stock_level
-    df = pd.DataFrame(results)
-    # df = df.columns
-    return df.to_dict()
-    df = df[["product_name", "stock_level"]].set_index("product_name")
-    return df.fillna("").to_dict()
+    return result
 
 
-@router.post("/inventory/")
+# helper function to create store and inventory for the first time
 async def create_inventory(inventory: Inventory, db: db_dependency):
     """Create store and product object in Postgresql database."""
     db_store = Store(store_name=inventory.store_name)
@@ -79,9 +87,8 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
     # Check if the store exists
     store = db.query(Store).filter(Store.store_name == inventory.store_name).first()
     if not store:
-        raise HTTPException(
-            status_code=404, detail=f"Store '{inventory.store_name}' not found."
-        )
+        logger.info(f"Store '{inventory.store_name}' not found. Create store first.")
+        return await create_inventory(inventory, db)
 
     for product_info in inventory.product_name:
         # Check if the product exists for the given store
@@ -95,11 +102,19 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
         )
 
         if not product:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Product '{product_info.product_name}' not found "
-                + f"for store '{inventory.store_name}'.",
+            logger.info(
+                f"Product '{product_info.product_name}' not found "
+                + f"for store '{inventory.store_name}'."
             )
+            logger.info("Populating product...")
+            db_product = Product(
+                product_name=product_info.product_name,
+                stock_level=product_info.stock_level,
+                updated_date=product_info.updated_date,
+                store_id=store.id,
+            )
+            db.add(db_product)
+            continue
 
         # Update stock level
         product.stock_level = product_info.stock_level
