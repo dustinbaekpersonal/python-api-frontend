@@ -34,4 +34,4 @@ class Inventory(BaseModel):
     """Pydantic model for stores."""
 
     store_name: AllowedStoreNames
-    product_name: List[ProductNames]
+    product_detail: List[ProductNames]

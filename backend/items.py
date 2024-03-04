@@ -70,7 +70,7 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     db.commit()
     db.refresh(db_store)
 
-    for product in inventory.product_name:
+    for product in inventory.product_detail:
         db_product = Product(
             product_name=product.product_name,
             stock_level=product.stock_level,
@@ -90,7 +90,7 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
         logger.info(f"Store '{inventory.store_name}' not found. Create store first.")
         return await create_inventory(inventory, db)
 
-    for product_info in inventory.product_name:
+    for product_info in inventory.product_detail:
         # Check if the product exists for the given store
         product = (
             db.query(Product)

@@ -6,7 +6,6 @@ import plotly.express as px
 import requests
 from dash import dcc, html
 from dash.dependencies import Input, Output
-from dash.exceptions import PreventUpdate
 
 from frontend.app import app
 
@@ -89,4 +88,10 @@ def draw_graph(store_name: str) -> px.bar:
         return fig
     else:
         logger.error(f"Error calling {url}: {response.status_code} {response.text}")
-        raise PreventUpdate
+        df = pd.DataFrame({})
+        fig = px.bar(
+            df,
+            title=f"Stock Level of {store_name.title()} by product",
+            labels={"stock_level": "Stock Level", "index": "Product"},
+        )
+        return fig

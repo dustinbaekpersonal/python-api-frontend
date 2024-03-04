@@ -135,7 +135,7 @@ def submit_stock_level(
 
     data = {
         "store_name": store,
-        "product_name": [
+        "product_detail": [
             {
                 "product_name": product,
                 "stock_level": stock_level,
