@@ -1,58 +1,44 @@
 """Test for items.py."""
+from typing import Any
+
 import pytest
 from fastapi.testclient import TestClient
 
-from api.main import app
+from backend.main import app
 
 client = TestClient(app)
 
 
 @pytest.mark.parametrize(
-    "product, expected_status, expected_response",
+    "store_name, expected_status, expected_response",
     [
         (
-            "milk",
+            "Waitrose",
             200,
-            {
-                "stock_level": {
-                    "Sainsbury's Euston": "",
-                    "Sainsbury's Holborn": "",
-                    "Sainsbury's Soho": "",
-                    "Sainsbury's Barbican": "",
+            [
+                {
+                    "id": 1,
+                    "product_name": "milk",
+                    "stock_level": 0,
+                    "store_id": 1,
+                    "updated_date": "2024-03-03T21:41:00.529000",
                 },
-                "datetime": {
-                    "Sainsbury's Euston": "",
-                    "Sainsbury's Holborn": "",
-                    "Sainsbury's Soho": "",
-                    "Sainsbury's Barbican": "",
-                },
-            },
+            ],
         ),  # successful API call
         (
-            "cup",
-            422,
-            {
-                "detail": [
-                    {
-                        "ctx": {"expected": "'milk', 'bread', 'fruit' or 'vegetables'"},
-                        "input": "cup",
-                        "loc": ["query", "product"],
-                        "msg": "Input should be 'milk', 'bread', 'fruit' or 'vegetables'",
-                        "type": "enum",
-                    }
-                ]
-            },
+            "Aldi",
+            404,
+            {"detail": "Store 'Aldi' not found."},
         ),  # wrong API call
     ],
 )
-def test_get_stock_levels(
-    product: str, expected_status: int, expected_response: dict
+def test_get_stock_levels_by_store_name(
+    store_name: str, expected_status: int, expected_response: dict[str, Any]
 ) -> None:
     """Unit test for get_stock_levels."""
-    response = client.get("/stock-levels", params={"product": product})
+    response = client.get(f"/inventory/{store_name}/")
     assert response.status_code == expected_status
     assert response.json() == expected_response
-
 
 
 # # TODO: Ideally we should patch _read_db function
@@ -75,4 +61,3 @@ def test_get_stock_levels(
 #         "stock_level":'10',
 #         "datetime": '20',
 #         }
-

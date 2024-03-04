@@ -4,18 +4,18 @@ from datetime import datetime
 
 import dash_bootstrap_components as dbc
 import requests
-from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
+from frontend.app import app
+
 config = {
-    "products": ["milk", "bread", "fruit", "vegetables"],
+    "products": ["milk", "bread", "fruit"],
     "stores": [
-        "Sainsbury's Euston",
-        "Sainsbury's Holborn",
-        "Sainsbury's Soho",
-        "Sainsbury's Barbican",
+        "Waitrose",
+        "Sainsbury's",
+        "Aldi",
     ],
 }
 
@@ -131,17 +131,23 @@ def submit_stock_level(
     if not n_clicks:
         raise PreventUpdate
 
-    url = "http://localhost:8000/stock-levels"
+    url = "http://localhost:8000/inventory"
 
     data = {
-        "product": product,
-        "store": store,
-        "stock_level": stock_level,
-        "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "store_name": store,
+        "product_detail": [
+            {
+                "product_name": product,
+                "stock_level": stock_level,
+                "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        ],
     }
 
     logger.info(f"Sending stock level to {url} with data: {data}")
+
     req = requests.put(url, json=data)
+
     if req.status_code != 200:
         logger.error(f"Error submitting stock level: {req.text}")
         raise PreventUpdate

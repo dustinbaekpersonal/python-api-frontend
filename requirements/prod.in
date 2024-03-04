@@ -8,3 +8,6 @@ pyyaml
 uvicorn
 webargs
 pip-system-certs
+sqlalchemy
+psycopg2-binary
+python-dotenv

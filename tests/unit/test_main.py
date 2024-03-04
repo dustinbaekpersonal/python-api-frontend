@@ -5,7 +5,7 @@ import pytest
 from fastapi.testclient import TestClient
 from httpx import AsyncClient
 
-from api.main import app
+from backend.main import app
 
 
 ### Using TestClient, which inherits from httpx.Client###

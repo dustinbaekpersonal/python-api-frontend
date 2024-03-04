@@ -1,10 +1,10 @@
 """Main script."""
 import logging
 
-import submit_stock_level
-import view_stock_level
-from app import app
 from dash import dcc, html
+
+from frontend import submit_stock_level, view_stock_level
+from frontend.app import app
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
