@@ -4,6 +4,8 @@ This repository illustrates how to develop APIs and how web applications interac
 
 For API backend service, we use FastAPI.
 For frontend, we use Dash.
+For database, we use PostgreSQL.
+
 
 ## :wrench: Developer set up
 
@@ -29,6 +31,54 @@ make uv-dev
 pre-commit install
 ```
 
+## :steam_locomotive: Running Docker container
+
+To emulate realistic environment, we will use docker containers for database and web server.
+
+Pre-requisite:
+You need to install docker on your machine: https://docs.docker.com/engine/install/
+
+For PostgreSQL DB docker,
+1. Pull docker image
+```bash
+$ docker pull postgres:alpine
+$ docker images # to check what images you have
+```
+
+2. Run docker image,
+```bash
+$ docker run --name fastapi-postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine
+```
+
+3. Enter into interactive mode with running container,
+```bash
+$ docker exec -it fastapi-postgres bash
+```
+
+4. Start PostgreSQL as a user postgres (superuser, admin),
+```bash
+$ psql -U postgres
+```
+
+5. Create Database, user, grant roles
+```psql
+postgres=# create database fastapi_db;
+postgres=# create user myuser with encrypted password 'password';
+postgres=# grant all privileges on database fastapi_db to myuser;
+```
+
+6. Connect to fastapi_db and change role to myuser
+```psql
+postgres=# \c fastapi_db
+postgres=# set role myuser;
+```
+
+7. Expose docker container to outside(FastAPI application)
+```psql
+postgres=# psql -h localhost -p 5431 postgres
+```
+
+
 
 ## :computer: Local run
 
@@ -50,3 +100,11 @@ $ python -m frontend.main
 ```
 
 You should then be able to view the front end application by navigating to http://localhost:8050/ in a browser.
+
+
+## Containerize your Fastapi application using docker
+1. Create Dockerfile and docker-compose.yml
+2. Build docker image and run,
+```bash
+$ docker compose up --build
+```
