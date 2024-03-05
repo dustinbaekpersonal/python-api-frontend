@@ -4,10 +4,9 @@ import logging
 import pandas as pd
 import plotly.express as px
 import requests
+from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output
-
-from frontend.app import app
 
 config = {
     "products": ["milk", "bread", "fruit"],
@@ -72,7 +71,7 @@ def draw_graph(store_name: str) -> px.bar:
     PreventUpdate
         When the API call fails
     """
-    url = f"http://localhost:8000/inventory/{store_name}"
+    url = f"http://backend:8000/inventory/{store_name}"
     logger.info(f"Calling {url} with store name ={store_name}")
     response = requests.get(url)
     if response.status_code == 200:

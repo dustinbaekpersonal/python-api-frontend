@@ -4,11 +4,10 @@ from datetime import datetime
 
 import dash_bootstrap_components as dbc
 import requests
+from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-
-from frontend.app import app
 
 config = {
     "products": ["milk", "bread", "fruit"],
@@ -131,7 +130,7 @@ def submit_stock_level(
     if not n_clicks:
         raise PreventUpdate
 
-    url = "http://localhost:8000/inventory"
+    url = "http://backend:8000/inventory"
 
     data = {
         "store_name": store,
