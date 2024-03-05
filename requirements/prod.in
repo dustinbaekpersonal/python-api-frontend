@@ -1,0 +1,15 @@
+## backend
+fastapi
+uvicorn
+pip-system-certs
+sqlalchemy
+psycopg2-binary
+python-dotenv
+
+## frontend
+dash
+dash-bootstrap-components
+pandas
+attrs
+webargs
+pip-system-certs
