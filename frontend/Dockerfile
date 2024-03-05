@@ -5,6 +5,6 @@ WORKDIR /dash
 COPY . /dash
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements/prod.txt
+RUN pip install -r prod.txt
 
 EXPOSE 8050
