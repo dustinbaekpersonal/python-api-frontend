@@ -18,67 +18,19 @@ $ git clone git@github.com:dustinbaekpersonal/python-api-frontend.git
 
 2. Create virtual environment and activate
 ```bash
-make uv-setup && source .venv/bin/activate
+$ cd backend # or cd frontend
+$ make uv-setup && source .venv/bin/activate
 ```
 
 3. Install dependencies
 ```bash
-make uv-dev
+$ make uv-dev
 ```
 
 4. To run pre-commit,
 ```bash
-pre-commit install
+$ pre-commit install
 ```
-
-## :steam_locomotive: Running Docker container
-
-To emulate realistic environment, we will use docker containers for database and web server.
-
-Pre-requisite:
-You need to install docker on your machine: https://docs.docker.com/engine/install/
-
-For PostgreSQL DB docker,
-1. Pull docker image
-```bash
-$ docker pull postgres:alpine
-$ docker images # to check what images you have
-```
-
-2. Run docker image,
-```bash
-$ docker run --name fastapi-postgres -e POSTGRES_PASSWORD=password -d -p 5432:5432 postgres:alpine
-```
-
-3. Enter into interactive mode with running container,
-```bash
-$ docker exec -it fastapi-postgres bash
-```
-
-4. Start PostgreSQL as a user postgres (superuser, admin),
-```bash
-$ psql -U postgres
-```
-
-5. Create Database, user, grant roles
-```psql
-postgres=# create database fastapi_db;
-postgres=# create user myuser with encrypted password 'password';
-postgres=# grant all privileges on database fastapi_db to myuser;
-```
-
-6. Connect to fastapi_db and change role to myuser
-```psql
-postgres=# \c fastapi_db
-postgres=# set role myuser;
-```
-
-7. Expose docker container to outside(FastAPI application)
-```psql
-postgres=# psql -h localhost -p 5431 postgres
-```
-
-
 
 ## :computer: Local run
 
@@ -104,9 +56,41 @@ $ python -m main
 You should then be able to view the front end application by navigating to http://localhost:8050/ in a browser.
 
 
-## Containerize your Fastapi application using docker
-1. Create Dockerfile and docker-compose.yml
-2. Build docker image and run,
+## :steam_locomotive: Running Docker container using docker-compose
+
+To emulate realistic environment, we will use docker containers for database and web servers.
+
+Pre-requisite:
+You need to install docker on your machine: https://docs.docker.com/engine/install/
+
+1. Create docker images and run containers for the first time.
 ```bash
-$ docker compose up --build
+$ docker-compose up --build
+```
+
+2. To check what images are pulled/build
+```bash
+$ docker images
+```
+
+3. To check what images are running using docker-compose
+```bash
+$ docker-compose ps
+```
+
+4. To stop docker containers
+```bash
+$ docker-compose stop
+```
+
+5. To check docker networks
+```bash
+$ docker network ls
+$ docker inspect network_name
+```
+
+6. To execute command in running container
+```bash
+$ docker exec -it container_name bash
+$ exit
 ```

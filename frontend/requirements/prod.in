@@ -1,13 +1,6 @@
-fastapi
 dash
 dash-bootstrap-components
 pandas
 attrs
-pyarrow
-pyyaml
-uvicorn
 webargs
 pip-system-certs
-sqlalchemy
-psycopg2-binary
-python-dotenv
