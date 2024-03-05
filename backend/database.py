@@ -14,7 +14,7 @@ user_name = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWORD")
 db_name = os.getenv("DB_NAME")
 
-URL_DATABASE = f"postgresql://{user_name}:{password}@localhost:5432/{db_name}"
+URL_DATABASE = f"postgresql+psycopg2://{user_name}:{password}@db:5432/{db_name}"
 
 engine = create_engine(URL_DATABASE)
 
