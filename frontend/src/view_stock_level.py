@@ -4,9 +4,10 @@ import logging
 import pandas as pd
 import plotly.express as px
 import requests
-from app import app
 from dash import dcc, html
 from dash.dependencies import Input, Output
+
+from src.app import app
 
 config = {
     "products": ["milk", "bread", "fruit"],

@@ -1,6 +1,7 @@
 """Main file for the template application."""
 from fastapi import FastAPI
-from items import router
+
+from app.items import router
 
 app = FastAPI(title="Stock Level API")
 
