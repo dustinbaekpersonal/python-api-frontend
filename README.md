@@ -39,7 +39,7 @@ To run the API and front end locally, you will need to have both running in two 
 In the first tab let's get the API running.
 
 ```bash
-$ cd backend
+$ cd backend/app
 $ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -49,7 +49,7 @@ Uvicorn is ASGI web server implementation for python, and 'main:app' is calling 
 Now open a new terminal tab (Ctrl/Command + T) and get the dash app running:
 
 ```bash
-$ cd frontend
+$ cd frontend/src
 $ python -m main
 ```
 
