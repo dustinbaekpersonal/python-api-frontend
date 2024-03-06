@@ -28,7 +28,7 @@ services:
     build:
       context: backend/
       dockerfile: Dockerfile
-    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
     env_file:
       - .env
     ports:
@@ -45,7 +45,7 @@ services:
     build:
       context: frontend/
       dockerfile: Dockerfile
-    command: sh -c "python -m main"
+    command: sh -c "python -m src.main"
     ports:
       - "8050:8050"
     volumes:

@@ -2,11 +2,12 @@
 import logging
 from typing import Annotated
 
-from database import Base, SessionLocal, engine
 from fastapi import APIRouter, Depends, HTTPException
-from models import Product, Store
-from schema import Inventory
 from sqlalchemy.orm import Session
+
+from app.database import Base, SessionLocal, engine
+from app.models import Product, Store
+from app.schema import Inventory
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
