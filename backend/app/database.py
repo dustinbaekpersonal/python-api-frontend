@@ -1,23 +1,28 @@
 """Define database connection."""
-import os
+from collections.abc import AsyncGenerator
 
-from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from loguru import logger
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
-# Load environment variables from .env file
-load_dotenv()
+from app.config import settings as global_settings
 
-# Get database credentials from environment variables
-user_name = os.getenv("DB_USER")
-password = os.getenv("DB_PASSWORD")
-db_name = os.getenv("DB_NAME")
+# Get database url from config file
+engine = create_async_engine(
+    global_settings.asyncpg_url.unicode_string(),
+    future=True,
+    echo=True,
+)
+logger.info("PostgreSQL engine started using asyncpg driver.")
 
-URL_DATABASE = f"postgresql+psycopg2://{user_name}:{password}@db:5432/{db_name}"
+AsyncSessionFactory = async_sessionmaker(
+    engine,
+    autoflush=False,
+    expire_on_commit=False,
+)
 
-engine = create_engine(URL_DATABASE)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+# Dependency
+async def get_db() -> AsyncGenerator:
+    """Yields a database object."""
+    async with AsyncSessionFactory() as session:
+        logger.debug(f"ASYNC Pool: {engine.pool.status()}")
+        yield session

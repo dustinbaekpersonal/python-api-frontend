@@ -3,14 +3,22 @@ version: "3"
 services:
   db:
     container_name: postgresql_db
-    image: postgres
+    image: postgres:16-alpine
     restart: always
+    volumes:
+      # - ./postgres-data:/var/lib/postgresql/data
+      # copy the sql script to create tables
+      - ./db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      # copy the sql script to populate tables
+      - ./db/insert_tables.sql:/docker-entrypoint-initdb.d/insert_tables.sql
+
     ports:
-      - "1486:1486"
+      - "1486:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_URL=${DB_URL}
 
   pgadmin:
     container_name: pgadmin
@@ -39,19 +47,18 @@ services:
     depends_on:
       - db
     restart: always
-
-  frontend:
-    container_name: dash_app
-    build:
-      context: frontend/
-      dockerfile: Dockerfile
-    command: sh -c "python -m src.main"
-    ports:
-      - "8050:8050"
-    volumes:
-      # mounting volume assures host machine and container are in sync
-      - ./frontend:/dash
-    depends_on:
-      - db
-      - backend
-    restart: always
+    # frontend:
+    #   container_name: dash_app
+    #   build:
+    #     context: frontend/
+    #     dockerfile: Dockerfile
+    #   command: sh -c "python -m src.main"
+    #   ports:
+    #     - "8050:8050"
+    #   volumes:
+    #     # mounting volume assures host machine and container are in sync
+    #     - ./frontend:/dash
+    #   depends_on:
+    #     - db
+    #     - backend
+    #   restart: always

@@ -1,0 +1,8 @@
+INSERT INTO users (FIRST_NAME, LAST_NAME, EMAIL)
+VALUES ('BAR', 'FOO', 'BARFOO@gmail.com');
+
+INSERT INTO stores (STORE_NAME)
+VALUES ('Waitrose');
+
+INSERT INTO products (STORE_ID, PRODUCT_NAME, STOCK_LEVEL)
+VALUES (1, 'milk', 10);
