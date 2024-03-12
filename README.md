@@ -94,3 +94,8 @@ $ docker inspect network_name
 $ docker exec -it container_name bash
 $ exit
 ```
+
+7. To run docker containers with logs
+```bash
+$ docker-compose logs -f -t
+```

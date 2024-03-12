@@ -1,5 +1,4 @@
 """Schemas of Inventory."""
-from datetime import datetime
 from enum import Enum
 from typing import List
 
@@ -21,13 +20,18 @@ class AllowedProductNames(str, Enum):
     bread = "bread"
     fruit = "fruit"
 
+class UserDetails(BaseModel):
+    """Pydantic model for users."""
+    first_name: str
+    last_name: str
+    email: str
 
 class ProductNames(BaseModel):
     """Pydantic model for products."""
 
     product_name: AllowedProductNames
     stock_level: int
-    updated_date: datetime
+    # updated_at: datetime
 
 
 class Inventory(BaseModel):
