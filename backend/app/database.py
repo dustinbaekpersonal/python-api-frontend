@@ -21,7 +21,7 @@ AsyncSessionFactory = async_sessionmaker(
 )
 
 
-# Dependency
+# Dependency injection of database
 async def get_db() -> AsyncGenerator:
     """Yields a database object."""
     async with AsyncSessionFactory() as session:
