@@ -2,10 +2,10 @@
 name = "api-frontend"
 description = "Interaction between backend APIs and frontent"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 ignore_missing_imports = true
 show_error_codes = true
 disable_error_code = ["import","attr-defined","assignment"]
@@ -26,7 +26,7 @@ ignore = [
     "C901",  # too complex
 ]
 line-length=92
-target-version="py310"
+target-version="py311"
 include = ["*.py"]
 
 [tool.ruff.pydocstyle]
