@@ -1,10 +1,12 @@
+name: CI
+
 on:
   pull_request:
   push:
     branches: [main]
 
 jobs:
-  pre-commit:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
