@@ -5,8 +5,10 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
-class User(Base): #type: ignore
+
+class User(Base):  # type: ignore
     """User SQLAlchemy model object."""
+
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -14,7 +16,8 @@ class User(Base): #type: ignore
     last_name = Column(String)
     email = Column(String)
 
-class Store(Base): #type: ignore
+
+class Store(Base):  # type: ignore
     """Store SQLAlchemy model object."""
 
     __tablename__ = "stores"
@@ -25,7 +28,7 @@ class Store(Base): #type: ignore
     products = relationship("Product", back_populates="store")
 
 
-class Product(Base): #type: ignore
+class Product(Base):  # type: ignore
     """Product SQLAlchemy model object."""
 
     __tablename__ = "products"

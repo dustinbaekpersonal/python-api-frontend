@@ -15,6 +15,7 @@ router = APIRouter()
 
 db_dependency = Annotated[AsyncSession, Depends(get_db)]
 
+
 @router.get("/users")
 async def get_user_by_email(email: str, db: db_dependency):
     """Retrieve user information by email."""
@@ -46,9 +47,8 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
 
     store = store[0]
 
-    statement_product = (
-        select(Product)
-        .where(Product.store_id == store.id, Store.store_name == store_name)
+    statement_product = select(Product).where(
+        Product.store_id == store.id, Store.store_name == store_name
     )
     result = await db.execute(statement_product)
     result = result.scalars().all()
@@ -66,7 +66,7 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     db_store = Store(store_name=inventory.store_name)
     db.add(db_store)
     await db.commit()
-    db.refresh(db_store)
+    await db.refresh(db_store)
 
     for product in inventory.product_detail:
         db_product = Product(
@@ -93,12 +93,9 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
 
     for product_info in inventory.product_detail:
         # Check if the product exists for the given store
-        product = (
-            select(Product)
-            .where(
-                Product.store_id == store.id,
-                Product.product_name == product_info.product_name,
-            )
+        product = select(Product).where(
+            Product.store_id == store.id,
+            Product.product_name == product_info.product_name,
         )
         product = await db.execute(product)
         product = product.scalars().first()

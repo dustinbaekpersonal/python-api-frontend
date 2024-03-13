@@ -20,6 +20,7 @@ AsyncSessionFactory = async_sessionmaker(
     expire_on_commit=False,
 )
 
+
 # Dependency
 async def get_db() -> AsyncGenerator:
     """Yields a database object."""

@@ -20,11 +20,14 @@ class AllowedProductNames(str, Enum):
     bread = "bread"
     fruit = "fruit"
 
+
 class UserDetails(BaseModel):
     """Pydantic model for users."""
+
     first_name: str
     last_name: str
     email: str
+
 
 class ProductNames(BaseModel):
     """Pydantic model for products."""
