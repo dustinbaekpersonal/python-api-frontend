@@ -1,19 +1,8 @@
-"""Define declarative models for ORM."""
+"""Declarative ORM models for inventory."""
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
-
-
-class User(Base):  # type: ignore
-    """User SQLAlchemy model object."""
-
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    email = Column(String)
 
 
 class Store(Base):  # type: ignore
