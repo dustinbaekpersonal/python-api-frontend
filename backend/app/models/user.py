@@ -1,5 +1,8 @@
 """Declarative ORM models for user."""
-from sqlalchemy import Integer, String, UniqueConstraint
+from fastapi import HTTPException
+from loguru import logger
+from sqlalchemy import Integer, String, UniqueConstraint, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
@@ -16,11 +19,12 @@ class User(Base):  # type: ignore
 
     Methods:
         __repr__: to print out User class with attributes
+        search: find a list of user details by email
     """
 
     __tablename__ = "users"
-    __table_args__ = UniqueConstraint(
-        "first_name", "last_name", "email", name="unique_hash_user"
+    __table_args__ = (
+        UniqueConstraint("first_name", "last_name", "email", name="unique_hash_user"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -34,3 +38,18 @@ class User(Base):  # type: ignore
             f"User detail: ID={self.id}, First Name={self.first_name} \n"
             + f"Last Name={self.last_name}, Email={self.email}"
         )
+
+    @classmethod
+    async def search(cls, email: str, db: AsyncSession):
+        """Class method to search user by email."""
+        statement = select(cls).where(cls.email == email)
+        result = await db.execute(statement)
+        result = result.scalars().all()
+
+        logger.debug(f"Users that have email:{email} is {result}")
+
+        if not result:
+            raise HTTPException(
+                status_code=404, detail=f"User with email '{email}' not found."
+            )
+        return result

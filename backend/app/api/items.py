@@ -3,7 +3,6 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from loguru import logger
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -18,49 +17,42 @@ db_dependency = Annotated[AsyncSession, Depends(get_db)]
 
 @router.get("/{store_name}")
 async def fetch_product_by_store_id(store_name: str, db: db_dependency):
-    """Read product stock level by store_id."""
-    # Check if the store exists
-    statement = select(Store).where(Store.store_name == store_name)
-    result = await db.execute(statement)
-    store = result.scalars().all()
+    """Fetch product's stock level by store name.
 
-    if len(store) > 1:
-        logger.debug(f"This is store object {store}.")
-        raise HTTPException(
-            status_code=500, detail=f"Store name {store_name} cannot be duplicated."
-        )
-
+    Args:
+        store_name (str): name of the stores.
+        db (AsyncSession): single logical asynchronous database transaction.
+    """
+    # Retrieve store details given store name
+    store = await Store.search(store_name, db)
     if not store:
         raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
+    logger.info(f"Store with store name: {store_name} has {store}")
+    # Search product details using store id
+    products = await Product.search_by_store(store.id, db)
 
-    store = store[0]
-
-    statement_product = select(Product).where(
-        Product.store_id == store.id, Store.store_name == store_name
-    )
-    result = await db.execute(statement_product)
-    result = result.scalars().all()
-
-    if not result:
-        raise HTTPException(
-            status_code=404, detail=f"Store {store_name} does not have any inventory."
-        )
-    return result
+    return products
 
 
 # helper function to create store and inventory for the first time
 async def create_inventory(inventory: Inventory, db: db_dependency):
-    """Create store and product object in Postgresql database."""
+    """Create store and product object in Postgresql database.
+
+    Args:
+        inventory (Inventory): pydantic schema of Inventory
+        db (AsyncSession): single logical asynchronous database transaction.
+    """
+    # create an instance of Store with store_name
     db_store = Store(store_name=inventory.store_name)
     db.add(db_store)
     await db.commit()
     await db.refresh(db_store)
 
+    # for each product, create Product instance and add to products table
     for product in inventory.product_detail:
         db_product = Product(
             product_name=product.product_name,
             stock_level=product.stock_level,
-            # updated_at=product.updated_at,
             store_id=db_store.id,
         )
         db.add(db_product)
@@ -69,11 +61,14 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
 
 @router.put("/")
 async def update_inventory(inventory: Inventory, db: db_dependency):
-    """Update stock level of given product and store."""
+    """Update stock level of given product and store.
+
+    Args:
+        inventory (Inventory): pydantic schema of Inventory
+        db (AsyncSession): single logical asynchronous database transaction.
+    """
     # Check if the store exists
-    statement = select(Store).filter(Store.store_name == inventory.store_name)
-    result = await db.execute(statement)
-    store = result.scalars().first()
+    store = await Store.search(inventory.store_name, db)
 
     if not store:
         logger.info(f"Store '{inventory.store_name}' not found. Create store first.")
@@ -81,12 +76,9 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
 
     for product_info in inventory.product_detail:
         # Check if the product exists for the given store
-        product = select(Product).where(
-            Product.store_id == store.id,
-            Product.product_name == product_info.product_name,
+        product = await Product.search_by_store_product_name(
+            store.id, product_info.product_name, db
         )
-        product = await db.execute(product)
-        product = product.scalars().first()
 
         if not product:
             logger.info(
@@ -97,7 +89,6 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
             db_product = Product(
                 product_name=product_info.product_name,
                 stock_level=product_info.stock_level,
-                # updated_at=product_info.updated_at,
                 store_id=store.id,
             )
             db.add(db_product)
@@ -105,6 +96,5 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
 
         # Update stock level
         product.stock_level = product_info.stock_level
-        # product.updated_at = product_info.updated_at
 
     await db.commit()
