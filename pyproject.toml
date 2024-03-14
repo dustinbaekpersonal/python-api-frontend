@@ -12,7 +12,7 @@ disable_error_code = ["import","attr-defined","assignment"]
 
 [tool.ruff]
 # Never enforce `E501` (line length violations).
-select = [
+lint.select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
     "F",  # pyflakes
@@ -21,7 +21,7 @@ select = [
     "B",  # flake8-bugbear
     "D",  # for docstring check
 ]
-ignore = [
+lint.ignore = [
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
 ]
@@ -29,7 +29,7 @@ line-length=92
 target-version="py311"
 include = ["*.py"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention="google"
 
 [tool.pytest.ini_options]
