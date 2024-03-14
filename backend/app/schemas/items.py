@@ -1,4 +1,4 @@
-"""Schemas of Inventory."""
+"""Schemas of Inventory required as an input of API request."""
 from enum import Enum
 from typing import List
 
@@ -19,14 +19,6 @@ class AllowedProductNames(str, Enum):
     milk = "milk"
     bread = "bread"
     fruit = "fruit"
-
-
-class UserDetails(BaseModel):
-    """Pydantic model for users."""
-
-    first_name: str
-    last_name: str
-    email: str
 
 
 class ProductNames(BaseModel):
