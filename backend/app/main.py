@@ -1,11 +1,13 @@
 """Main file for the template application."""
 from fastapi import FastAPI
 
-from app.items import router
+from app.api.items import router as items_router
+from app.api.user import router as user_router
 
 app = FastAPI(title="Stock Level API")
 
-app.include_router(router)
+app.include_router(items_router)
+app.include_router(user_router)
 
 
 @app.get("/")
