@@ -1,4 +1,4 @@
-"""API calls defined."""
+"""API calls for inventory are defined."""
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -7,28 +7,16 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
-from app.models import Product, Store, User
-from app.schema import Inventory
+from app.models.items import Product, Store
+from app.schemas.items import Inventory
 
-router = APIRouter()
+router = APIRouter(prefix="/inventory")
 
 
 db_dependency = Annotated[AsyncSession, Depends(get_db)]
 
 
-@router.get("/users")
-async def get_user_by_email(email: str, db: db_dependency):
-    """Retrieve user information by email."""
-    statement = select(User).where(User.email == email)
-    result = await db.execute(statement)
-    result = result.scalars().first()
-
-    if not result:
-        raise HTTPException(status_code=404, detail=f"User with email '{email}' not found.")
-    return result
-
-
-@router.get("/inventory/{store_name}")
+@router.get("/{store_name}")
 async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     """Read product stock level by store_id."""
     # Check if the store exists
@@ -79,7 +67,7 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     await db.commit()
 
 
-@router.put("/inventory/")
+@router.put("/")
 async def update_inventory(inventory: Inventory, db: db_dependency):
     """Update stock level of given product and store."""
     # Check if the store exists
