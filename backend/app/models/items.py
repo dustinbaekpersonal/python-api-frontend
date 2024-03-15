@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base
 
 
-class Store(Base):  # type: ignore
+class Store(Base):
     """Store orm model class.
 
     Attributes:
@@ -41,7 +41,7 @@ class Store(Base):  # type: ignore
         return result
 
 
-class Product(Base):  # type: ignore
+class Product(Base):
     """Product orm model class.
 
     Attributes:

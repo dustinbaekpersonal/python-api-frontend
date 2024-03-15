@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.models.base import Base
 
 
-class User(Base):  # type: ignore
+class User(Base):
     """User orm model class.
 
     Attributes:
