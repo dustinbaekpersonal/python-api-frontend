@@ -23,14 +23,15 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
         store_name (str): name of the stores.
         db (AsyncSession): single logical asynchronous database transaction.
     """
-    # Retrieve store details given store name
+    # retrieve Store model instance (i.e. row in stores table) given store name
     store = await Store.search(store_name, db)
 
     if not store:
+        # when there isn't store_name in stores table in db
         raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
-
     logger.info(f"Store with store name: {store_name} has {store}")
-    # Search product details using store id
+
+    # retrieve Product model instance using store id
     products = await Product.search_by_store(store.id, db)
 
     if not products:
@@ -42,7 +43,7 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     return products
 
 
-# helper function to create store and inventory for the first time
+### helper function to create store and inventory for the first time ###
 async def create_inventory(inventory: Inventory, db: db_dependency):
     """Create store and product object in Postgresql database.
 
@@ -54,7 +55,7 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     db_store = Store(store_name=inventory.store_name)
     await db_store.create(db)
 
-    # for each product, create Product instance and add to products table
+    # for each product, create Product model instance and add to products table
     for product in inventory.product_detail:
         db_product = Product(
             product_name=product.product_name,
@@ -109,7 +110,12 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
 
 @router.delete("/")
 async def delete_inventory(inventory: InventoryDelete, db: db_dependency):
-    """Delete inventory record in Products table."""
+    """Delete inventory record in Products table.
+
+    Args:
+        inventory (InventoryDelete): pydantinc schema to define to delete record
+        db (AsyncSession): single logical asynchronous database transaction
+    """
     store_name = inventory.store_name
     product_name = inventory.product_name
 

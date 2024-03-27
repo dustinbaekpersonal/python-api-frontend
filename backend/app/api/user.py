@@ -18,19 +18,31 @@ db_dependency = Annotated[AsyncSession, Depends(get_db)]
 
 @router.get("/{email}")
 async def get_user_by_email(email: str, db: db_dependency):
-    """Retrieve user information by email."""
+    """Retrieve user information by email.
+
+    Args:
+        email (str): email address of a user to find
+        db (AsyncSession): single logical asynchronous database transaction
+    """
     return await User.search(email, db)
 
 
 @router.post("/")
 async def create_user(payload: UserIn, db: db_dependency):
-    """Create a user in Users table."""
+    """Create a user in Users table.
+
+    Args:
+        payload (UserIn): pydantic schema required to create a user in users table
+        db (AsyncSession): single logical asynchronous database transaction
+    """
     logger.info(f"Payload has type of {type(payload)} in form of {payload}.")
     logger.info(f"payload model_dump {payload.model_dump()}")
     # model_dump method creates a dictionary out of user input based on UserIn
     user: User = User(**payload.model_dump())
+
     try:
         await user.create(db)
+    # handling unique constraint violation of email address in users table
     except IntegrityError as e:
         raise HTTPException(
             status_code=404,
@@ -40,6 +52,11 @@ async def create_user(payload: UserIn, db: db_dependency):
 
 @router.delete("/")
 async def delete_user_by_email(email: str, db: db_dependency):
-    """Delete user detail matching the given email."""
+    """Delete user detail matching the given email.
+
+    Args:
+        email (str): email address of a user to find
+        db (AsyncSession): single logical asynchronous database transaction
+    """
     user = await User.search(email, db)
     return await user.delete(db)
