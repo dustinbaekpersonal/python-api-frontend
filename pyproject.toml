@@ -32,6 +32,10 @@ include = ["*.py"]
 [tool.ruff.lint.pydocstyle]
 convention="google"
 
+[tool.ruff.lint.extend-per-file-ignores]
+"__init__.py" = ["D104"]
+
+
 [tool.pytest.ini_options]
 addopts = """
 -v --cov=backend \

@@ -1,4 +1,4 @@
-"""Main file for the template application."""
+"""Instantiate FastAPI app by including routers defined."""
 from fastapi import FastAPI
 
 from app.api.items import router as items_router
@@ -13,4 +13,4 @@ app.include_router(user_router)
 @app.get("/")
 async def root():
     """Root api endpoint."""
-    return {"message": "Welcome to FastAPI Course!"}
+    return {"message": "Welcome to Full Stack Dev!"}

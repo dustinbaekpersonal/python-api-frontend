@@ -1,4 +1,4 @@
-"""Define database connection."""
+"""Create postgresql database engine and connection."""
 from collections.abc import AsyncGenerator
 
 from loguru import logger
@@ -23,7 +23,7 @@ AsyncSessionFactory = async_sessionmaker(
 
 # Dependency injection of database
 async def get_db() -> AsyncGenerator:
-    """Yields a database object."""
+    """Yields a database object using async context manager."""
     async with AsyncSessionFactory() as session:
         logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         yield session
