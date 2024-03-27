@@ -34,3 +34,10 @@ class Inventory(BaseModel):
 
     store_name: AllowedStoreNames
     product_detail: List[ProductNames]
+
+
+class InventoryDelete(BaseModel):
+    """Pydantic model to be used when to delete inventory record."""
+
+    store_name: AllowedStoreNames
+    product_name: AllowedProductNames

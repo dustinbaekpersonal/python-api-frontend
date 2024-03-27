@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.models.items import Product, Store
-from app.schemas.items import Inventory
+from app.schemas.items import Inventory, InventoryDelete
 
 router = APIRouter(prefix="/inventory")
 
@@ -25,8 +25,6 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     """
     # Retrieve store details given store name
     store = await Store.search(store_name, db)
-    if not store:
-        raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
     logger.info(f"Store with store name: {store_name} has {store}")
     # Search product details using store id
     products = await Product.search_by_store(store.id, db)
@@ -44,9 +42,6 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     """
     # create an instance of Store with store_name
     db_store = Store(store_name=inventory.store_name)
-    # db.add(db_store)
-    # await db.commit()
-    # await db.refresh(db_store)
     await db_store.create(db)
 
     # for each product, create Product instance and add to products table
@@ -68,11 +63,12 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
         inventory (Inventory): pydantic schema of Inventory
         db (AsyncSession): single logical asynchronous database transaction.
     """
+    store_name = inventory.store_name
     # Check if the store exists
-    store = await Store.search(inventory.store_name, db)
+    store = await Store.search(store_name, db)
 
     if not store:
-        logger.info(f"Store '{inventory.store_name}' not found. Create store first.")
+        logger.info(f"Store '{store_name}' not found. Create store first.")
         return await create_inventory(inventory, db)
 
     for product_info in inventory.product_detail:
@@ -84,7 +80,7 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
         if not product:
             logger.info(
                 f"Product '{product_info.product_name}' not found "
-                + f"for store '{inventory.store_name}'."
+                + f"for store '{store_name}'."
             )
             logger.info("Populating product...")
             db_product = Product(
@@ -99,3 +95,23 @@ async def update_inventory(inventory: Inventory, db: db_dependency):
         product.stock_level = product_info.stock_level
 
     await db.commit()
+
+
+@router.delete("/")
+async def delete_inventory(inventory: InventoryDelete, db: db_dependency):
+    """Delete inventory record in Products table."""
+    store_name = inventory.store_name
+    product_name = inventory.product_name
+
+    # Check if the store exists
+    store = await Store.search(store_name, db)
+
+    product = await Product.search_by_store_product_name(store.id, product_name, db)
+
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Product {product_name} does not exist for store {store_name}.",
+        )
+
+    return await product.delete(db)

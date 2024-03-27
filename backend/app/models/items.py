@@ -37,7 +37,8 @@ class Store(Base):
         statement = select(cls).where(cls.store_name == store_name)
         result = await db.execute(statement)
         result = result.scalars().first()
-
+        if not result:
+            raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
         return result
 
 
@@ -97,4 +98,10 @@ class Product(Base):
         )
         result = await db.execute(statement)
         result = result.scalars().first()
+
+        if not result:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Store ID {cls.id} does not have product {product_name}",
+            )
         return result
