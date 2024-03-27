@@ -22,7 +22,7 @@ class AllowedProductNames(str, Enum):
 
 
 class ProductNames(BaseModel):
-    """Pydantic model for products."""
+    """Pydantic schema for products."""
 
     product_name: AllowedProductNames
     stock_level: int
@@ -30,14 +30,14 @@ class ProductNames(BaseModel):
 
 
 class Inventory(BaseModel):
-    """Pydantic model for stores."""
+    """Pydantic schema for stores."""
 
     store_name: AllowedStoreNames
     product_detail: List[ProductNames]
 
 
 class InventoryDelete(BaseModel):
-    """Pydantic model to be used when to delete inventory record."""
+    """Pydantic schema to be used when to delete inventory record."""
 
     store_name: AllowedStoreNames
     product_name: AllowedProductNames
