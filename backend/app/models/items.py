@@ -1,4 +1,4 @@
-"""Declarative ORM models for inventory."""
+"""Declarative ORM models for inventory (stores and products tables)."""
 from sqlalchemy import ForeignKey, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -7,7 +7,7 @@ from app.models.base import Base
 
 
 class Store(Base):
-    """Store orm model class.
+    """Store orm model class to abstract 'stores' table in database.
 
     Attributes:
         id (int): unique ID assigned for each store
@@ -40,7 +40,7 @@ class Store(Base):
 
 
 class Product(Base):
-    """Product orm model class.
+    """Product orm model class to abstract 'products' table in database.
 
     Attributes:
         id (int): unique ID assigned for each product
@@ -51,6 +51,8 @@ class Product(Base):
 
     Methods:
         __repr__: to print out Product class with attributes
+        search_by_store: retrieve all product rows from products table using store id
+        search_by_store_product_name: retrieve product rows for given store
     """
 
     __tablename__ = "products"
@@ -71,7 +73,12 @@ class Product(Base):
 
     @classmethod
     async def search_by_store(cls, store_id: int, db: AsyncSession):
-        """Class method to find a products by store_id."""
+        """Class method to find all products in a store.
+
+        Args:
+            store_id (id): unique ID assigned to each store
+            db (AsyncSession): single logical asynchronous database transaction
+        """
         statement = select(cls).where(cls.store_id == store_id)
         result = await db.execute(statement)
         result = result.scalars().all()
@@ -81,7 +88,13 @@ class Product(Base):
     async def search_by_store_product_name(
         cls, store_id: int, product_name: str, db: AsyncSession
     ):
-        """Finds a product detail for given store id and product name."""
+        """Class method to find a product detail for given store.
+
+        Args:
+            store_id (int): unique ID assigned to each store
+            product_name (str): name of the products (e.g. milk, bread, fruit)
+            db (AsyncSession): single logical asynchronous database transaction
+        """
         statement = select(cls).where(
             cls.store_id == store_id,
             cls.product_name == product_name,
