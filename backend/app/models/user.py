@@ -23,7 +23,7 @@ class User(Base):
     """
 
     __tablename__ = "users"
-    __table_args__ = (UniqueConstraint("full_name", "email", name="unique_hash_user"),)
+    __table_args__ = (UniqueConstraint("email", name="unique_hash_user"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     username: Mapped[str] = mapped_column(String, nullable=False)
