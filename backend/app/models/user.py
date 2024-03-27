@@ -23,20 +23,19 @@ class User(Base):
     """
 
     __tablename__ = "users"
-    __table_args__ = (
-        UniqueConstraint("first_name", "last_name", "email", name="unique_hash_user"),
-    )
+    __table_args__ = (UniqueConstraint("full_name", "email", name="unique_hash_user"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    first_name: Mapped[str] = mapped_column(String, nullable=False)
-    last_name: Mapped[str] = mapped_column(String, nullable=False)
+    username: Mapped[str] = mapped_column(String, nullable=False)
+    full_name: Mapped[str] = mapped_column(String)
     email: Mapped[str] = mapped_column(String, nullable=False)
+    password: Mapped[str] = mapped_column(String, nullable=False)
 
     def __repr__(self) -> str:
         """Return string representation of class."""
         return (
-            f"User detail: ID={self.id}, First Name={self.first_name} \n"
-            + f"Last Name={self.last_name}, Email={self.email}"
+            f"User detail: ID={self.id}, User Name={self.username} \n"
+            + f"Email={self.email}"
         )
 
     @classmethod
@@ -44,7 +43,7 @@ class User(Base):
         """Class method to search user by email."""
         statement = select(cls).where(cls.email == email)
         result = await db.execute(statement)
-        result = result.scalars().all()
+        result = result.scalars().first()
 
         logger.debug(f"Users that have email:{email} is {result}")
 

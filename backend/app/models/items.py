@@ -90,7 +90,7 @@ class Product(Base):
     async def search_by_store_product_name(
         cls, store_id: int, product_name: str, db: AsyncSession
     ):
-        """Finds a product detail for given store name and product name."""
+        """Finds a product detail for given store id and product name."""
         statement = select(cls).where(
             cls.store_id == store_id,
             cls.product_name == product_name,
