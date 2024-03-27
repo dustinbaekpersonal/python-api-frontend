@@ -10,9 +10,14 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    """Settings used across backend."""
+    """Settings used across backend.
+
+    Example:
+        asyncpg_url: postgresql database url
+    """
 
     asyncpg_url: PostgresDsn = os.getenv("DB_URL")
+    ## TODO: Add authentication feature
     # jwt_algorithm: str = os.getenv("JWT_ALGORITHM")
     # jwt_expire: int = os.getenv("JWT_EXPIRE")
 

@@ -1,5 +1,5 @@
-INSERT INTO users (FIRST_NAME, LAST_NAME, EMAIL)
-VALUES ('BAR', 'FOO', 'BARFOO@gmail.com');
+INSERT INTO users (USERNAME, FULL_NAME, EMAIL, PASSWORD)
+VALUES ('stackoverflow', 'foobar','foobar@gmail.com', 'iampassword');
 
 INSERT INTO stores (STORE_NAME)
 VALUES ('Waitrose');

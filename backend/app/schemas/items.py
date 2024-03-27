@@ -1,4 +1,4 @@
-"""Schemas of Inventory."""
+"""Schemas of Inventory required as an input of API request."""
 from enum import Enum
 from typing import List
 
@@ -21,16 +21,8 @@ class AllowedProductNames(str, Enum):
     fruit = "fruit"
 
 
-class UserDetails(BaseModel):
-    """Pydantic model for users."""
-
-    first_name: str
-    last_name: str
-    email: str
-
-
 class ProductNames(BaseModel):
-    """Pydantic model for products."""
+    """Pydantic schema for products."""
 
     product_name: AllowedProductNames
     stock_level: int
@@ -38,7 +30,14 @@ class ProductNames(BaseModel):
 
 
 class Inventory(BaseModel):
-    """Pydantic model for stores."""
+    """Pydantic schema for stores."""
 
     store_name: AllowedStoreNames
     product_detail: List[ProductNames]
+
+
+class InventoryDelete(BaseModel):
+    """Pydantic schema to be used when to delete inventory record."""
+
+    store_name: AllowedStoreNames
+    product_name: AllowedProductNames
