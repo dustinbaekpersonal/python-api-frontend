@@ -39,14 +39,15 @@ async def create_inventory(inventory: Inventory, db: db_dependency):
     """Create store and product object in Postgresql database.
 
     Args:
-        inventory (Inventory): pydantic schema of Inventory
+        inventory (Inventory): pydantic schema of Inventory defining user input.
         db (AsyncSession): single logical asynchronous database transaction.
     """
     # create an instance of Store with store_name
     db_store = Store(store_name=inventory.store_name)
-    db.add(db_store)
-    await db.commit()
-    await db.refresh(db_store)
+    # db.add(db_store)
+    # await db.commit()
+    # await db.refresh(db_store)
+    await db_store.create(db)
 
     # for each product, create Product instance and add to products table
     for product in inventory.product_detail:
