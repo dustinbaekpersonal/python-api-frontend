@@ -1,8 +1,9 @@
 """API calls for user are defined."""
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from loguru import logger
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
@@ -28,7 +29,13 @@ async def create_user(payload: UserIn, db: db_dependency):
     logger.info(f"payload model_dump {payload.model_dump()}")
     # model_dump method creates a dictionary out of user input based on UserIn
     user: User = User(**payload.model_dump())
-    return await user.create(db)
+    try:
+        await user.create(db)
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=404,
+            detail=f"There can't be more than one user with same email '{payload.email}'.",
+        ) from e
 
 
 @router.delete("/")

@@ -25,9 +25,19 @@ async def fetch_product_by_store_id(store_name: str, db: db_dependency):
     """
     # Retrieve store details given store name
     store = await Store.search(store_name, db)
+
+    if not store:
+        raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
+
     logger.info(f"Store with store name: {store_name} has {store}")
     # Search product details using store id
     products = await Product.search_by_store(store.id, db)
+
+    if not products:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Store {store_name} does not have any inventory.",
+        )
 
     return products
 

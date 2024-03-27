@@ -1,5 +1,4 @@
 """Declarative ORM models for inventory."""
-from fastapi import HTTPException
 from sqlalchemy import ForeignKey, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -37,8 +36,6 @@ class Store(Base):
         statement = select(cls).where(cls.store_name == store_name)
         result = await db.execute(statement)
         result = result.scalars().first()
-        if not result:
-            raise HTTPException(status_code=404, detail=f"Store '{store_name}' not found.")
         return result
 
 
@@ -78,13 +75,6 @@ class Product(Base):
         statement = select(cls).where(cls.store_id == store_id)
         result = await db.execute(statement)
         result = result.scalars().all()
-
-        if not result:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Store {cls.store_name} does not have any inventory.",
-            )
-
         return result
 
     @classmethod
@@ -99,9 +89,4 @@ class Product(Base):
         result = await db.execute(statement)
         result = result.scalars().first()
 
-        if not result:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Store ID {cls.id} does not have product {product_name}",
-            )
         return result
