@@ -1,12 +1,10 @@
 """Submit stock level."""
-import logging
-from datetime import datetime
-
 import dash_bootstrap_components as dbc
 import requests
 from dash import dcc, html
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+from loguru import logger
 
 from src.app import app
 
@@ -18,13 +16,6 @@ config = {
         "Aldi",
     ],
 }
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s",
-    datefmt="%d/%m/%Y %H:%M:%S",
-    level="DEBUG",
-)
 
 layout = dcc.Tab(
     label="Report stock levels",
@@ -133,13 +124,13 @@ def submit_stock_level(
 
     url = "http://backend:8000/inventory"
 
+    # TODO: as a user how would I know the input data schema?
     data = {
         "store_name": store,
         "product_detail": [
             {
                 "product_name": product,
                 "stock_level": stock_level,
-                "updated_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             }
         ],
     }
