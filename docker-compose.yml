@@ -47,18 +47,19 @@ services:
     depends_on:
       - db
     restart: always
-    # frontend:
-    #   container_name: dash_app
-    #   build:
-    #     context: frontend/
-    #     dockerfile: Dockerfile
-    #   command: sh -c "python -m src.main"
-    #   ports:
-    #     - "8050:8050"
-    #   volumes:
-    #     # mounting volume assures host machine and container are in sync
-    #     - ./frontend:/dash
-    #   depends_on:
-    #     - db
-    #     - backend
-    #   restart: always
+
+  frontend:
+    container_name: dash_app
+    build:
+      context: frontend/
+      dockerfile: Dockerfile
+    command: sh -c "python -m src.main"
+    ports:
+      - "8050:8050"
+    volumes:
+      # mounting volume assures host machine and container are in sync
+      - ./frontend:/dash
+    depends_on:
+      - db
+      - backend
+    restart: always

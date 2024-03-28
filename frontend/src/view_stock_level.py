@@ -1,11 +1,10 @@
 """View stock level."""
-import logging
-
 import pandas as pd
 import plotly.express as px
 import requests
 from dash import dcc, html
 from dash.dependencies import Input, Output
+from loguru import logger
 
 from src.app import app
 
@@ -17,14 +16,6 @@ config = {
         "Aldi",
     ],
 }
-
-
-logger = logging.getLogger(__name__)
-logging.basicConfig(
-    format="%(asctime)s : %(levelname)s : %(message)s",
-    datefmt="%d/%m/%Y %H:%M:%S",
-    level="DEBUG",
-)
 
 colors = {"background": "#111111", "text": "#7FDBFF"}
 

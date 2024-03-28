@@ -99,3 +99,10 @@ $ exit
 ```bash
 $ docker-compose logs -f -t
 ```
+
+
+### Extra tips
+1. psql command
+```bash
+$ psql -U postgres -d fastapi_db
+```
